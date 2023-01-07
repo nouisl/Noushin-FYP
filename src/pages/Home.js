@@ -3,7 +3,8 @@ function Home() {
       <>
         <div>
           <p></p>
-          <h1>Welcome</h1>
+          <h1>Welcome Maliyat
+          </h1>
         </div>
       </>
     );
