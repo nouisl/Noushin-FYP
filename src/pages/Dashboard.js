@@ -1,14 +1,13 @@
-function Home() {
+function Dashboard() {
     return (
       <>
         <div>
           <p></p>
-          <h1> WELCOME
-          </h1>
+            <h1>THIS IS THE DASHBOARD</h1>
         </div>
       </>
     );
   };
   
-export default Home;
+export default Dashboard;
   
