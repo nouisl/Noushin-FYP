@@ -1,3 +1,8 @@
+import './styles/Home.css';
+import { Link } from "react-router-dom";
+import { useState } from "react";
+// import logo from "../images/logo.png";
+
 function Home() {
     return (
       <>

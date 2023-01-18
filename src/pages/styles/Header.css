@@ -1,0 +1,23 @@
+.title {
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+  
+.text {
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.topBanner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:93%;
+    padding: 30px 60px;
+}
+
+.logo{
+    width:10vw;
+    height:calc(10vw*0.3)
+}
