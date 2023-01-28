@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import './styles/Footer.css';
 
 function Footer() {
 
@@ -6,7 +7,6 @@ function Footer() {
     <>
       <footer className="footer py-3 my-4">
           <p className="text-center text-muted">© Noushin Islam</p>
-          <p className="px-2 text-muted"><Link to="/db">Dashboard</Link></p>
       </footer>
     </>
   );

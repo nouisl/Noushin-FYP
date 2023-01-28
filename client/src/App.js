@@ -2,24 +2,22 @@ import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import Footer from "./pages/Footer";
-import Access from "./pages/Access";
+import Cart from "./pages/Cart";
 
 function App() {
-  return (
-      <div className="App">
-          <Router>
-              {/* <Header /> */}
-              <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/acess" element={<Access />} />
-                  <Route path="/db" element={<Dashboard />} />
-              </Routes>
-              <Footer />
-          </Router>
-      </div>
-  );
+    return (
+        <div className="App">
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/db" element={<Dashboard />} />
+                    <Route path="/cart" element={<Cart />} />
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 export default App;
+
 
