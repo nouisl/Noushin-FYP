@@ -1,16 +1,24 @@
 import { Link } from "react-router-dom";
-import './styles/Header.css';
+import "./styles/Header.css";
+import logo from "../images/logo5.png"
+import { ConnectButton, Icon, Select, DatePicker, Input, Button } from "web3uikit";
 
 function Header() {
   return (
     <>
-      <nav>
-        <div className="logo" >
+      <div className="banner">
+        <div>
           <Link to="/">
-            <img src="https://www.carnival.com/-/media/images/header2013/carnival-logo-png.png" alt="Carnival Home Page" />
+          <img className="logo" src={logo} alt="logo"></img>
           </Link>
         </div>
-      </nav>
+        <div className="search">
+          <div></div>
+        </div>
+        <div className="connect">
+          <ConnectButton />
+        </div>
+      </div>
     </>
   );
 };

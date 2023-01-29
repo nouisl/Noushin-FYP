@@ -9,15 +9,9 @@ h1, h2 {
 }
 
 .logo {
-    width: 10vw;
     height: calc(10vw*0.3)
 }
 
-.search {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
 
 .column {
     padding: 80px 10px 80px 10px;
@@ -34,21 +28,6 @@ h1, h2 {
     font-weight: 700;
     padding-top: 11px;
     padding-bottom: 20px;
-}
-
-.connect {
-    width: 200px;
-    justify-content: end;
-    display: flex;
-    align-items: center;
-}
-
-.banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 93%;
-    padding: 30px 60px;
 }
 
 .explore {
