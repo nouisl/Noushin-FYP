@@ -1,7 +1,30 @@
 footer {
     position: "fixed";
     bottom: 0;
-    display: block;
     width: 100%;
     background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 60px;
+}
+
+a .ig, .fb {
+    color: black;
+}
+
+a .ig:hover, .fb:hover {
+    color: #2E7DAF;
+}
+
+.footer-copyright {
+    text-align: center;
+}
+
+.footer-links {
+    text-align: center;
+}
+
+.footer-social a {
+    font-size: 1.5rem;
 }

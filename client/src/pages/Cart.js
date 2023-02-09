@@ -1,10 +1,10 @@
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function Cart() {
     return (
       <>
-      <Header />
+      {/* <Header /> */}
       <div>
         <p></p>
         <h1>THIS IS THE CART</h1>
