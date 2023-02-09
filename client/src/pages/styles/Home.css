@@ -13,6 +13,7 @@ h1, h2 {
     text-align: center;
     width: 100%;
     box-sizing: border-box;
+    background-color: black;
     color: white;
 }
 
@@ -30,7 +31,7 @@ h1, h2 {
 }
 
 .container {
-    background-image: url('/src/images/bg.png');
+    padding-top: 50px;
 }
 
 .col {
