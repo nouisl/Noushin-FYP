@@ -1,5 +1,3 @@
-pragma solidity ^0.7.0;
-
 contract ProductStore {
     // Define the ERC721 token using OpenZeppelin's implementation
     using ERC721 for ERC721;

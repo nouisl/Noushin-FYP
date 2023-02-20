@@ -41,7 +41,7 @@ function SearchBar() {
           options={sizes}
         />
       </div>
-      <Link to={"/db"} state={{
+      <Link to={"/event"} state={{
         artist: artist,
         size: size
       }}>
@@ -59,17 +59,16 @@ function Home() {
     <>
       <Header />
       <SearchBar />
- 
-        <div className="column">
-          <p></p>
-          <h1>THIS IS HOME</h1>
-          <div className="container">
-            <div className="row align-items-center">
-              <div className="d-flex">
-                <p className="mx-auto">
-                  <Link to="/db"><button className="btn btn-light">start shopping now</button></Link>
-                </p>
-              </div>
+      <div className="column">
+        <p></p>
+        <h1>THIS IS HOME</h1>
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="d-flex">
+              <p className="mx-auto">
+                <Link to="/event"><button className="btn btn-light">find your next event</button></Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>

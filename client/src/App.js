@@ -1,6 +1,9 @@
 import './styles/App.css';
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
+import Event from "./pages/Event";
+import AboutUs from "./pages/AboutUs";
+import FAQ  from "./pages/Event";
+import Privacy  from "./pages/Privacy";
 import Cart from "./pages/Cart";
 import { MoralisProvider } from "react-moralis";
 import { NotificationProvider } from 'web3uikit';
@@ -15,8 +18,11 @@ function App() {
                     <Router>
                         <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/db" element={<Dashboard />} />
-                            <Route path="/cart" element={<Cart />} />
+                            <Route path="/event" element={<Event />} />
+                            <Route path="/aboutus" element={<AboutUs />} />
+                            <Route path="/faq" element={<FAQ />} />
+                            <Route path="/privacy" element={<Privacy />} />
+                            {/* <Route path="/cart" element={<Cart />} /> */}
                         </Routes>
                     </Router>
                 </NotificationProvider>

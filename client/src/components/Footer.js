@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedinIn} from 'react-icons/fa';
 import './styles/Footer.css';
 
 function Footer() {
@@ -13,9 +13,9 @@ function Footer() {
               <a>&copy; Noushin Islam</a>
             </div>
             <div className="footer-links">
-              <a href="#" className="mx-2 text-muted">About Us</a>
-              <a href="#" className="mx-2 text-muted">FAQ</a>
-              <a href="#" className="mx-2 text-muted">Privacy</a>
+              <Link to="/aboutus"><a className="mx-2 text-muted">About Us</a></Link>
+              <Link to="/faq"><a className="mx-2 text-muted">FAQ</a></Link>
+              <Link to="/privacy"><a className="mx-2 text-muted">Privacy</a></Link>
             </div>
           </div>
           <div className="footer-sns text-muted">
@@ -24,6 +24,9 @@ function Footer() {
             </a>
             <a href="#">
               <FaInstagram className="ig mx-2" />
+            </a>
+            <a href="#">
+              <FaLinkedinIn className="ig mx-2" />
             </a>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { Icon, Modal, Card } from "web3uikit";
 import { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
+import { FaUser } from 'react-icons/fa';
 
 function User ({account}) {
 
@@ -27,7 +28,7 @@ function User ({account}) {
   return (
     <>
       <div onClick={() => setVisible(true)}>
-        {/* <Icon fill="#000000" size={24} svg="user" /> */}
+        <FaUser className="fb mx-2" />
       </div>
 
       <Modal

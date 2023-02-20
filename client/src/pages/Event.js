@@ -1,15 +1,16 @@
-import './styles/Dashboard.css';
+import './styles/Event.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import User from "../components/User";
 import { Link } from "react-router-dom";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { ConnectButton, Button, useNotification } from "web3uikit";
-// import RentalsMap from "../components/RentalsMap";
+import EventsMap from "../components/EventsMap";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { FaSearch } from 'react-icons/fa';
 
-function Dashboard() {
+function Event() {
   const { state: searchFilters } = useLocation();
   const [highLight, setHighLight] = useState();
   const { Moralis, account } = useMoralis();
@@ -67,7 +68,7 @@ function Dashboard() {
   }, [searchFilters]);
 
   // const buy = async function (id, price) {
-    
+
   //   for (
   //     var arr = [], dt = new Date(start);
   //     dt <= end;
@@ -122,11 +123,24 @@ function Dashboard() {
   return (
     <>
       <Header />
-      <div className="column">
+      <div className="container d-flex">
+        <div className="row mx-auto">
+          <div className=' searchReminder'>
+            <div className="filter">{searchFilters.artist}</div>
+            <div className="vl" />
+            <div className="filter">{searchFilters.size}</div>
+            <div className="searchFiltersIcon">
+              <FaSearch className="sc mx-2" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="hl"></div>
+      <div className="dbcolumn">
         <p></p>
         <h1>THIS IS DASHBOARD</h1>
         <div className="container">
-          
+
         </div>
       </div>
       <Footer />
@@ -134,5 +148,5 @@ function Dashboard() {
   );
 };
 
-export default Dashboard;
+export default Event;
 
