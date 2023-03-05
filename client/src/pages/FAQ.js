@@ -2,8 +2,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function FAQ() {
-    return (
-      <>
+  return (
+    <>
       <Header />
       <div>
         <p></p>
@@ -11,7 +11,7 @@ function FAQ() {
       </div>
       <Footer />
     </>
-    );
-  };
-  
+  );
+};
+
 export default FAQ;
