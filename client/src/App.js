@@ -1,8 +1,8 @@
 import './styles/App.css';
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import AboutUs from "./pages/AboutUs";
-import FAQ from "./pages/Event";
+import AboutUs from "./components/AboutUs";
+import FAQ from "./components/FAQ";
 import Privacy from "./components/Privacy";
 import { MoralisProvider } from "react-moralis";
 import { NotificationProvider } from 'web3uikit';

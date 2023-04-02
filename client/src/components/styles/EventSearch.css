@@ -1,0 +1,21 @@
+.event-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.event-search input {
+    margin-right: 10px;
+
+}
+
+.event-search button {
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.event-search select {
+    margin-right: 10px;
+}

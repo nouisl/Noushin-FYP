@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const Web3 = require('web3');
+const cors = require('cors');
 const axios = require('axios');
 const app = express();
 const port = 3000;
@@ -9,8 +10,10 @@ require('dotenv').config();
 //const contractAddress = ""; //goerli
 const provider = new Web3('https://rpc-mumbai.maticvigil.com/');
 const web3 = new Web3(provider);
-const contractAddress = "0x4020Fe70B318C8cE9f082C8685Bc62110d324119";
+const contractAddress = "0x2d2Fdb2aF9723FDFEc66354c5cF9E3Ff025FA114";
 app.use(express.json());
+app.use(cors());
+
 
 // create connection to mysql db
 const connection = mysql.createConnection({
@@ -43,14 +46,34 @@ async function getContract() {
     }
 }
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
 // get events from mysql
-app.get('/events/sql', async (req, res) => {
-    const sql = 'SELECT * FROM events';
+app.get("/events/sql", async (req, res) => {
+    const { name, date, city } = req.query;
+    let sql = "SELECT * FROM events";
+
+    if (name || date || city) {
+        sql += " WHERE";
+        if (name) {
+            sql += ` event_name LIKE '%${name}%'`;
+        }
+        if (date) {
+            sql += `${name ? " AND" : ""} event_date = '${date}'`;
+        }
+        if (city) {
+            sql += `${name || date ? " AND" : ""} city = '${city}'`;
+        }
+    }
+
     connection.query(sql, (err, result) => {
         if (err) throw err;
         res.send(result);
     });
 });
+
 
 // get events from blockchain
 app.get('/events/matic', async (req, res) => {
@@ -62,7 +85,7 @@ app.get('/events/matic', async (req, res) => {
         console.error(error);
         res.status(500).send('Error getting events');
     }
-}); 
+});
 
 // get event by id from mysql
 app.get('/events/sql/:id', async (req, res) => {
@@ -95,7 +118,7 @@ app.get('/events/matic/:id', async (req, res) => {
     }
 });
 
-// create event on sql and blockchain
+// create event in sql and on blockchain
 app.post('/events/:address', async (req, res) => {
     try {
         const address = req.params.address;
@@ -134,6 +157,7 @@ app.post('/events/:address', async (req, res) => {
     });
 }); */
 
+// delete event in sql and on blockchain
 app.delete('/events/:id/:address', async (req, res) => {
     try {
         const id = req.params.id;
@@ -145,28 +169,26 @@ app.delete('/events/:id/:address', async (req, res) => {
                 resolve(result);
             });
         });
-        /* 
         const contract = await getContract();
         const gasPrice = await web3.eth.getGasPrice();
         const options = { gasPrice: gasPrice, gasLimit: 5000000, from: address };
-        const event = await contract.methods.deleteEvent(id).send(options); */
+        const event = await contract.methods.deleteEvent(id).send(options);
         console.log(`Event with ID ${id} deleted`);
-        /* res.send(event); */
+        res.send(event);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-
-// transactions
-
+// book ticket in sql and on blockchain
 app.post('/transactions/:id/:address', async (req, res) => {
     try {
         const id = req.params.id;
         const address = req.params.address;
-        web3.eth.accounts.wallet.add(address);
         const { num_tickets } = req.body;
+
+        // Get event information from the database
         const sql = 'SELECT * FROM events WHERE event_id = ?';
         const result = await new Promise((resolve, reject) => {
             connection.query(sql, [id], async (err, result) => {
@@ -174,21 +196,37 @@ app.post('/transactions/:id/:address', async (req, res) => {
                 if (result.length === 0) {
                     return res.status(404).send('Event not found');
                 }
-                resolve(result);
+                resolve(result[0]);
             });
         });
-        const tickets = num_tickets;
+
+        // Calculate the total price of the tickets
+        //const totalPrice = web3.utils.toWei(result.price_per_ticket.toString(), 'ether');
+        //const totalPrice = result.price_per_ticket * num_tickets;
+        const totalPrice = result.price_per_ticket * num_tickets;
+
+        // Get the contract instance and gas price
         const contract = await getContract();
         const gasPrice = await web3.eth.getGasPrice();
-        const options = { gasPrice: gasPrice, gasLimit: 5000000, from: address };
-        const event = await contract.methods.bookTickets(id, tickets).send(options);
-        console.log(`Booking completed`);
-        res.send(event);
+        const options = {
+            from: address,
+            to: "0x55Abb41068D21E86b89304F2AB80C6597F8F5096",
+            gasPrice: gasPrice,
+            gasLimit: 5000000,
+            value: Moralis.Units.MATIC(totalPrice)
+        };
+
+        // Call the bookTickets function
+        const tx = await contract.methods.bookTickets(id, num_tickets).send(options);
+
+        // Return the transaction receipt
+        res.send(tx);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 // app.get('/transactions', (req, res) => {
 //     const sql = 'SELECT * FROM transactions';

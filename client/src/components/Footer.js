@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaLinkedinIn} from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import './styles/Footer.css';
-import Privacy from './Privacy.js';
+
 
 function Footer() {
- 
+
   return (
     <>
       <footer className="footer">
@@ -16,7 +16,7 @@ function Footer() {
             <div className="footer-links">
               <Link to="/aboutus"><a className="mx-2 text-muted">About Us</a></Link>
               <Link to="/faq"><a className="mx-2 text-muted">FAQ</a></Link>
-              <Privacy/>
+              <Link to="/privacy"><a className="mx-2 text-muted">Privacy</a></Link>
             </div>
           </div>
           <div className="footer-sns text-muted">

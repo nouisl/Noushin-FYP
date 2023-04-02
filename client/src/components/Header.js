@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./styles/Header.css";
-import logo from "../images/logo5.png"
+import logo from "../images/banner.png"
 import { ConnectButton, Select, DatePicker, Input } from "web3uikit";
 import { useState } from "react";
 import { FaSearch } from 'react-icons/fa';
@@ -18,7 +18,7 @@ function Header() {
           <ConnectButton />
         </div>
       </header>
-      <div className="hl"></div>
+      {/* <div className="hl"></div> */}
     </>
 
   );

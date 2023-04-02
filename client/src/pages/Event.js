@@ -1,29 +1,27 @@
 import './styles/Event.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import User from "../components/User";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
-import { ConnectButton, Button, useNotification } from "web3uikit";
-import EventsMap from "../components/EventsMap";
+import { ConnectButton, Button, useNotification, color } from "web3uikit";
+import Categories from "../components/Categories";
+import EventSearch from "../components/EventSearch";
+import EventMap from "../components/EventMap";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { FaSearch } from 'react-icons/fa';
 
 function Event() {
-  const { state: searchFilters } = useLocation();
-  const [highLight, setHighLight] = useState();
-  const { Moralis, account } = useMoralis();
-  const [DBList, setDBList] = useState();
-  const [coordinates, setCoordinates] = useState([]);
-  const contractProcessor = useWeb3ExecuteFunction();
+  const [events, setEvents] = useState([]);
   const dispatch = useNotification();
 
   const handleSuccess = () => {
     dispatch({
       type: "success",
-      message: `Nice! You are going to ${searchFilters.artist} in size ${searchFilters.size}!!`,
-      title: "Transaction Succesful",
+      message: `Nice! You are going to!!`,
+      title: "Booking Succesful",
       position: "topL",
     });
   };
@@ -32,7 +30,7 @@ function Event() {
     dispatch({
       type: "error",
       message: `${msg}`,
-      title: "Transaction Failed",
+      title: "Booking Failed",
       position: "topL",
     });
   };
@@ -40,107 +38,73 @@ function Event() {
   const handleNoAccount = () => {
     dispatch({
       type: "error",
-      message: `You need to connect your wallet to buy a product.`,
+      message: `You need to connect your wallet to book a rental`,
       title: "Not Connected",
       position: "topL",
     });
   };
 
+  const [category, setCategory] = useState('');
+  const location = useLocation();
+
   useEffect(() => {
-    async function fetchDBList() {
-      const Dashboard = Moralis.Object.extend("Dashboard");
-      const query = new Moralis.Query(Dashboard);
-      query.equalTo("name", searchFilters.artist);
-      query.equalTo("size", searchFilters.size);
+    const params = new URLSearchParams(location.search);
+    setCategory(params.get('category') || '');
+  }, [location.search]);
 
-      const result = await query.find();
-
-      let cords = [];
-      result.forEach((e) => {
-        cords.push({ lat: e.attributes.lat, lng: e.attributes.long });
-      });
-
-      setCoordinates(cords);
-      setDBList(result);
+  useEffect(() => {
+    async function fetchEvents(category) {
+      const url = category ? `http://localhost:3000/events/sql?category=${category}` : 'http://localhost:3000/events/sql';
+      const response = await axios.get(url);
+      setEvents(response.data);
     }
 
-    fetchDBList();
-  }, [searchFilters]);
+    fetchEvents(category);
+  }, [category]);
 
-  // const buy = async function (id, price) {
-
-  //   for (
-  //     var arr = [], dt = new Date(start);
-  //     dt <= end;
-  //     dt.setDate(dt.getDate() + 1)
-  //   ) {
-  //     arr.push(new Date(dt).toISOString().slice(0, 10)); // yyyy-mm-dd
-  //   }
-
-  //   let options = {
-  //     contractAddress: "0xa9110224Df672c266569931F4e03f009651149E6",
-  //     functionName: "addDatesBooked",
-  //     abi: [
-  //       {
-  //         "inputs": [
-  //           {
-  //             "internalType": "uint256",
-  //             "name": "id",
-  //             "type": "uint256"
-  //           },
-  //           {
-  //             "internalType": "string[]",
-  //             "name": "newBookings",
-  //             "type": "string[]"
-  //           }
-  //         ],
-  //         "name": "addDatesBooked",
-  //         "outputs": [],
-  //         "stateMutability": "payable",
-  //         "type": "function"
-  //       }
-  //     ],
-  //     params: {
-  //       id: id,
-  //       newBookings: arr,
-  //     },
-  //     msgValue: Moralis.Units.ETH(dayPrice * arr.length),
-  //   }
-  //   console.log(arr);
-
-  //   await contractProcessor.fetch({
-  //     params: options,
-  //     onSuccess: () => {
-  //       handleSuccess();
-  //     },
-  //     onError: (error) => {
-  //       handleError(error.data.message)
-  //     }
-  //   });
-
-  // }
+  const handleSearch = async (searchValue, dateValue, cityValue) => {
+    let url = `http://localhost:3000/events/sql?name=${searchValue}&date=${dateValue}`;
+    if (cityValue) {
+      url += `&city=${cityValue}`;
+    }
+    const response = await axios.get(url);
+    setEvents(response.data);
+  };
 
   return (
     <>
       <Header />
-      <div className="container d-flex">
-        <div className="row mx-auto">
-          <div className=' searchReminder'>
-            <div className="filter">{searchFilters.artist}</div>
-            <div className="vl" />
-            <div className="filter">{searchFilters.size}</div>
-            <div className="searchFiltersIcon">
-              <FaSearch className="sc mx-2" />
-            </div>
+      <div className="categories">
+        <Categories />
+      </div>
+      <div className="home-event">
+        <div className="event-search-card">
+          <div className="card-body">
+            <h5 className="card-title">Find an Event</h5>
+            <EventSearch onSearch={handleSearch} />
           </div>
         </div>
-      </div>
-      <div className="hl"></div>
-      <div className="dbcolumn">
-        <p></p>
-        <h1>THIS IS DASHBOARD</h1>
         <div className="container">
-
+          <div className="row">
+            {events.length > 0 ? (
+              events.map((event, index) => (
+                <div key={event.event_id} className={`col-sm-${12 / events.length} ${index > 2 ? 'offset-sm-3' : ''} mb-3`}>
+                  <div className="card">
+                    <img className="card-img-top" src={event.img_url} alt="Event Image" />
+                    <div className="card-body">
+                      <h5 className="card-title" style={{ color: "black" }}>{event.event_name}</h5>
+                      <p className="card-text">{event.event_description}</p>
+                      <p className="card-text"><small className="text-muted">{new Date(event.event_date).toLocaleDateString()} at {event.start_time} - {event.end_time}</small></p>
+                      <p className="card-text">Price per ticket: {event.price_per_ticket} MATIC</p>
+                      <Link to={`/event/${event.event_id}`} className="btn btn-danger">Book Ticket</Link>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: "white" }}>No event found.</p>
+            )}
+          </div>
         </div>
       </div>
       <Footer />
@@ -149,4 +113,3 @@ function Event() {
 };
 
 export default Event;
-

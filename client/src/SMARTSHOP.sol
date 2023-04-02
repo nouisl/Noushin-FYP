@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract WebTicketing is ERC721URIStorage {
     address public owner;
+    uint256 public maxEventId;
 
     struct Event {
         string name;
@@ -16,18 +17,8 @@ contract WebTicketing is ERC721URIStorage {
 
     event newTicketsBooked(
         uint256 indexed eventId,
-        uint256 numTickets,
         address indexed booker,
-        uint256 price,
-        uint256 timestamp
-    );
-
-    event ticketsResold(
-        uint256 indexed eventId,
-        uint256 numTickets,
-        address indexed seller,
-        address indexed buyer,
-        uint256 price,
+        uint256 tokenId,
         uint256 timestamp
     );
 
@@ -39,15 +30,8 @@ contract WebTicketing is ERC721URIStorage {
     }
 
     function createEvent(
-        uint256 eventId,
-        string memory name,
-        uint256 totalTickets,
-        uint256 pricePerTicket
-    ) public {
-        require(
-            msg.sender == owner,
-            "Only owner of smart contract can create events"
-        );
+        uint256 eventId, string memory name, uint256 totalTickets, uint256 pricePerTicket) public {
+        require(msg.sender == owner, "Only owner of smart contract can create events");
         require(!eventIds[eventId], "Event ID already exists");
         Event storage newEvent = events[eventId];
         newEvent.name = name;
@@ -55,119 +39,69 @@ contract WebTicketing is ERC721URIStorage {
         newEvent.pricePerTicket = pricePerTicket;
         newEvent.exists = true;
         eventIds[eventId] = true;
+        if (eventId > maxEventId) {
+            maxEventId = eventId;
+        }
     }
 
-    function bookTickets(uint256 eventId, uint256 numTickets)
-        public
-        payable
-        returns (
-            bytes32,
-            address,
-            address,
-            uint256
-        )
-    {
+    function bookTickets(uint256 eventId, uint256 numTickets) public payable returns (bytes32, uint256, address, uint256, uint256, uint256[] memory) {
         require(events[eventId].exists, "Event does not exist");
-        require(
-            events[eventId].totalTickets >= numTickets,
-            "Not enough tickets available"
-        );
-        uint256 totalPrice = events[eventId].pricePerTicket *
-            1 ether *
-            numTickets;
-        require(msg.value == totalPrice, "Insufficient funds");
+        require(events[eventId].totalTickets >= numTickets, "Not enough tickets available");
+        uint256 totalPrice = events[eventId].pricePerTicket * 1 ether * numTickets;
+        require(msg.value == totalPrice, string(abi.encodePacked("Insufficient funds. You sent: ", msg.value, ", but the total price is: ", totalPrice)));
+       
+        uint256[] memory tokenIds = new uint256[](numTickets);
+        string[] memory tokenURIs = new string[](numTickets);
 
         for (uint256 i = 0; i < numTickets; i++) {
-            uint256 tokenId = eventId * 10000 + events[eventId].totalTickets;
-            _safeMint(msg.sender, tokenId);
+            bytes32 hash = keccak256(abi.encodePacked(eventId * 10000 + events[eventId].totalTickets));
+            uint256 tokenId = uint256(hash);
+            _mint(msg.sender, tokenId);
             _setTokenURI(tokenId, tokenURI(tokenId));
+
+            tokenIds[i] = tokenId;
+            tokenURIs[i] = tokenURI(tokenId);
             events[eventId].totalTickets--;
+
+            emit newTicketsBooked(eventId, msg.sender, tokenId, block.timestamp);
         }
 
         address sender = msg.sender;
-        address receiver = owner;
         payable(owner).transfer(msg.value);
-
-        emit newTicketsBooked(
-            eventId,
-            numTickets,
-            sender,
-            events[eventId].pricePerTicket,
-            block.timestamp
-        );
-        return (blockhash(block.number), sender, receiver, totalPrice);
+        return (blockhash(block.number), block.timestamp, sender, eventId, totalPrice, tokenIds);
     }
 
-    function getEvent(uint256 eventId)
-        public
-        view
-        returns (
-            string memory,
-            uint256,
-            uint256,
-            bool
-        )
-    {
+    function getEvent(uint256 eventId) public view returns (string memory, uint256, uint256, bool){
         Event memory e = events[eventId];
         return (e.name, e.totalTickets, e.pricePerTicket, e.exists);
     }
 
-    function getEvents() public view returns (string memory) {
-    string memory output = "[";
-    uint256 eventCount = 0;
-
-    // Store the number of events in a variable
-    for (uint256 i = 0; i < 2**256-1; i++) {
-        if (eventIds[i]) {
-            eventCount++;
-        } else {
-            break;
-        }
-    }
-
-    for (uint256 i = 0; i < eventCount; i++) {
-        Event memory e = events[i];
-        string memory eventString = string(abi.encodePacked(
-            '{"name":"', e.name, '", "totalTickets":', 
-            uintToString(e.totalTickets), 
-            ', "pricePerTicket":', uintToString(e.pricePerTicket),
-            ', "exists":', e.exists ? 'true' : 'false', 
-            '}'
-        ));
-        output = string(abi.encodePacked(output, eventString));
-        if (i < eventCount - 1) {
-            output = string(abi.encodePacked(output, ","));
-        }
-    }
-    output = string(abi.encodePacked(output, "]"));
-    return output;
-}
-
-function uintToString(uint256 v) internal pure returns (string memory) {
-    if (v == 0) {
-        return "0";
-    }
-    uint256 j = v;
-    uint256 len;
-    while (j != 0) {
-        len++;
-        j /= 10;
-    }
-    bytes memory bstr = new bytes(len);
-    uint256 k = len;
-    while (v != 0) {
-        bstr[--k] = bytes1(uint8(48 + v % 10));
-        v /= 10;
-    }
-    return string(bstr);
-}
+    /*function getEvents() public view returns (Event[] memory) {
+        
+    }*/
 
     function deleteEvent(uint256 eventId) public {
-        require(msg.sender == owner,"Only owner of smart contract can delete events");
+        require(msg.sender == owner, "Only owner of smart contract can delete events");
         require(events[eventId].exists, "Event does not exist");
-        // Remove the event from the mapping
-        delete events[eventId];
-        eventIds[eventId] = false;
-    }
 
+        uint256[] memory tokensToRemove = new uint256[](
+            events[eventId].totalTickets
+        );
+
+        for (uint256 i = 0; i < events[eventId].totalTickets; i++) {
+            bytes32 hash = keccak256(abi.encodePacked(eventId * 10000 + i));
+            uint256 tokenId = uint256(hash);
+            tokensToRemove[i] = tokenId;
+        }
+
+        for (uint256 i = 0; i < tokensToRemove.length; i++) {
+            uint256 tokenId = tokensToRemove[i];
+            if (_exists(tokenId)) {
+                _burn(tokenId);
+            }
+        }
+
+        delete events[eventId];
+        delete eventIds[eventId];
+    }
 }
