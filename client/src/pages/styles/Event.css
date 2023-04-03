@@ -46,7 +46,6 @@ a {
 }
 
 .home-event {
-    background: linear-gradient(to bottom, #2E7DAF 0%, #23158c 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
