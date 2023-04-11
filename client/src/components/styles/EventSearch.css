@@ -1,21 +1,29 @@
 .event-search {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
 }
 
-.event-search input {
-    margin-right: 10px;
-
+.search-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
 }
 
-.event-search button {
-    padding: 5px 10px;
-    color: white;
+.btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: none;
     cursor: pointer;
 }
 
-.event-search select {
-    margin-right: 10px;
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+select {
+    height: 5%;
 }

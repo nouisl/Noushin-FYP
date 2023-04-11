@@ -52,22 +52,6 @@ a .sc:hover {
     color: #2E7DAF;
 }
 
-.search-container {
-    display: flex;
-    align-items: center;
-    width: 80%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.search-inputs {
-    display: flex;
-    align-items: center;
-    width: 200px;
-    margin-right: 5px;
-}
-
 .home {
     height: 90vh;
     background: linear-gradient(to bottom, #2E7DAF 0%, #23158c 100%);

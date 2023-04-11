@@ -4,7 +4,7 @@ const Web3 = require('web3');
 const cors = require('cors');
 const axios = require('axios');
 const app = express();
-const port = 3000;
+const port = 4000;
 require('dotenv').config();
 
 //const contractAddress = ""; //goerli
@@ -46,15 +46,15 @@ async function getContract() {
     }
 }
 
+// get
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Welcome!');
 });
 
 // get events from mysql
 app.get("/events/sql", async (req, res) => {
     const { name, date, city } = req.query;
     let sql = "SELECT * FROM events";
-
     if (name || date || city) {
         sql += " WHERE";
         if (name) {
@@ -67,26 +67,14 @@ app.get("/events/sql", async (req, res) => {
             sql += `${name || date ? " AND" : ""} city = '${city}'`;
         }
     }
-
     connection.query(sql, (err, result) => {
         if (err) throw err;
         res.send(result);
     });
 });
 
-
-// get events from blockchain
-app.get('/events/matic', async (req, res) => {
-    try {
-        const contract = await getContract();
-        const event = await contract.methods.getEvents().call();
         res.send(event);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Error getting events');
-    }
-});
-
 // get event by id from mysql
 app.get('/events/sql/:id', async (req, res) => {
     try {
@@ -105,16 +93,17 @@ app.get('/events/sql/:id', async (req, res) => {
     }
 });
 
-// get event by id from blockchain
-app.get('/events/matic/:id', async (req, res) => {
+// get all unique cities from mysql
+app.get('/events/cities', async (req, res) => {
     try {
-        const id = req.params.id;
-        const contract = await getContract();
-        const event = await contract.methods.getEvent(id).call();
-        res.send(event);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error getting event');
+        const sql = 'SELECT DISTINCT city FROM events';
+        connection.query(sql, (err, result) => {
+            if (err) throw err;
+            res.json(result);
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
     }
 });
 
@@ -148,8 +137,8 @@ app.post('/events/:address', async (req, res) => {
 
 /* app.put('/events/:id', (req, res) => {
     const id = req.params.id;
-    const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer } = req.body;
-    const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ? WHERE event_id = ?';
+    const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold } = req.body;
+    const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ? WHERE event_id = ?';
     connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, id], (err, result) => {
         if (err) throw err;
         console.log(`Event with ID ${id} updated`);
@@ -182,7 +171,7 @@ app.delete('/events/:id/:address', async (req, res) => {
 });
 
 // book ticket in sql and on blockchain
-app.post('/transactions/:id/:address', async (req, res) => {
+/* app.post('/transactions/:id/:address', async (req, res) => {
     try {
         const id = req.params.id;
         const address = req.params.address;
@@ -201,8 +190,6 @@ app.post('/transactions/:id/:address', async (req, res) => {
         });
 
         // Calculate the total price of the tickets
-        //const totalPrice = web3.utils.toWei(result.price_per_ticket.toString(), 'ether');
-        //const totalPrice = result.price_per_ticket * num_tickets;
         const totalPrice = result.price_per_ticket * num_tickets;
 
         // Get the contract instance and gas price
@@ -213,7 +200,8 @@ app.post('/transactions/:id/:address', async (req, res) => {
             to: "0x55Abb41068D21E86b89304F2AB80C6597F8F5096",
             gasPrice: gasPrice,
             gasLimit: 5000000,
-            value: Moralis.Units.MATIC(totalPrice)
+            value: web3.utils.toWei(web3.utils.toBN(totalPrice))
+
         };
 
         // Call the bookTickets function
@@ -222,10 +210,26 @@ app.post('/transactions/:id/:address', async (req, res) => {
         // Return the transaction receipt
         res.send(tx);
     } catch (error) {
-        console.error(error);
+        const id = req.params.id;
+        const address = req.params.address;
+        const { num_tickets } = req.body;
+
+        // Get event information from the database
+        const sql = 'SELECT * FROM events WHERE event_id = ?';
+        const result = await new Promise((resolve, reject) => {
+            connection.query(sql, [id], async (err, result) => {
+                if (err) reject(err);
+                if (result.length === 0) {
+                    return res.status(404).send('Event not found');
+                }
+                resolve(result[0]);
+            });
+        });
+        const totalPrice = result.price_per_ticket * num_tickets;
+        console.error(web3.utils.toWei(web3.utils.toBN(totalPrice)));
         res.status(500).send('Internal Server Error');
     }
-});
+}); */
 
 
 // app.get('/transactions', (req, res) => {
@@ -240,3 +244,31 @@ app.post('/transactions/:id/:address', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+
+// all blockchain functions that can be implemented if I pass user credentials from frontend to backend
+
+// get events from blockchain
+/* app.get('/events/matic', async (req, res) => {
+    try {
+        const contract = await getContract();
+        const event = await contract.methods.getEvents().call();
+        res.send(event);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting events');
+    }
+}); */
+
+// get event by id from blockchain
+/* app.get('/events/matic/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const contract = await getContract();
+        const event = await contract.methods.getEvent(id).call();
+        res.send(event);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting event');
+    }
+}); */
