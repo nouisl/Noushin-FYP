@@ -1,48 +1,32 @@
 import { Link } from "react-router-dom";
 import "./styles/Header.css";
 import logo from "../images/banner.png";
-import { ConnectButton, useNotification } from "web3uikit";
-import { useEffect, useState } from "react";
+import { useNotification } from "web3uikit";
+import { useContext } from "react";
+import { Web3Context } from '../Web3Context.js';
 import User from "./User.js";
-import Web3 from "web3";
 
 function Header() {
-  const [loadButton, setLoadButton] = useState(false);
-  const [account, setAccount] = useState(null);
-  const { addNotification } = useNotification();
+  const dispatch = useNotification();
+  const { account, loadWeb3, handleLogout } = useContext(Web3Context);
 
-  useEffect(() => {
-    setLoadButton(true);
-    async function loadWeb3() {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        try {
-          await window.ethereum.enable();
-          const accounts = await web3.eth.getAccounts();
-          setAccount(accounts[0]);
-        } catch (error) {
-          addNotification({
-            title: "Error",
-            message: error.message,
-            type: "danger",
-            position: "topL",
-          });
-        }
-      } else if (window.web3) {
-        const web3 = new Web3(window.web3.currentProvider);
-        const accounts = await web3.eth.getAccounts();
-        setAccount(accounts[0]);
-      } else {
-        addNotification({
-          title: "Error",
-          message: "Non-Ethereum browser detected. You should consider trying MetaMask!",
-          type: "danger",
-          position: "topL",
-        });
-      }
-    }
-    loadWeb3();
-  }, [addNotification]);
+  const loginMsg = (acc) => {
+    dispatch({
+      type: "success",
+      message: "Welcome! You have been logged in successfully",
+      title: "Login Successful",
+      position: "topL",
+    });
+  };
+
+  const logoutMsg = () => {
+    dispatch({
+      type: "info",
+      message: "You have been logged out successfully!",
+      title: "Logout Successful",
+      position: "topL",
+    });
+  };
 
   return (
     <>
@@ -54,9 +38,17 @@ function Header() {
         </div>
         <div className="connect">
           {account &&
-            <User account={account} />
+            <User />
           }
-          <ConnectButton moralisAuth={false} />
+          {!account &&
+            <button className="btn btn-primary login" onClick={() => { loadWeb3(); loginMsg(); }}>Connect Wallet</button>
+          }
+          {/* {account &&
+              <button className="btn btn-outline-primary login logins">{account}</button>
+          }  */}
+          {account &&
+            <button className="btn btn-danger logout" onClick={() => { handleLogout(); logoutMsg(); }}>Logout</button>
+          }
         </div>
       </header>
     </>

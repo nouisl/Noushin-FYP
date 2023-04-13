@@ -1,7 +1,7 @@
 import './styles/Event.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 import { useLocation } from "react-router";
 import Categories from "../components/Categories";
@@ -58,7 +58,6 @@ function Event() {
             <EventMap events={events} />
           </div>
         </div>
-
       </div>
       <Footer />
     </>

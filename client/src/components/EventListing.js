@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { useNotification, Input } from "web3uikit";
+import { useState, useContext } from "react";
+import { useNotification, Input, BannerStrip, Loading, Typography } from "web3uikit";
+import { Web3Context } from '../Web3Context.js';
 import './styles/EventListing.css';
-import axios from "axios";
-import Web3 from "web3";
+
 
 function EventListing(props) {
     const { events } = props;
     const dispatch = useNotification();
     const [num_tickets, setNumTickets] = useState(1);
     const abi = require("../contractABI.json");
-    const [account, setAccount] = useState(null);
-    const { addNotification } = useNotification();
+    const { web3, account } = useContext(Web3Context);
+    const [loading, setLoading] = useState(false);
 
     const handleSuccess = (event_name, num_tickets) => {
         dispatch({
@@ -39,71 +39,60 @@ function EventListing(props) {
         });
     };
 
-    useEffect(() => {
-        async function loadWeb3() {
-            if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
-                try {
-                    await window.ethereum.enable();
-                    const accounts = await web3.eth.getAccounts();
-                    setAccount(accounts[0]);
-                } catch (error) {
-                    addNotification({
-                        title: "Error",
-                        message: error.message,
-                        type: "danger",
-                        position: "topL",
-                    });
-                }
-            } else if (window.web3) {
-                const web3 = new Web3(window.web3.currentProvider);
-                const accounts = await web3.eth.getAccounts();
-                setAccount(accounts[0]);
-            } else {
-                addNotification({
-                    title: "Error",
-                    message: "Non-Ethereum browser detected. You should consider trying MetaMask!",
-                    type: "danger",
-                    position: "topL",
-                });
-            }
-        }
-        loadWeb3();
-    }, [addNotification]);
-
     const bookTicket = async function (event_id, event_name, event_price, num_tickets) {
-        // check if web3 is available
-        if (!window.ethereum) {
-            handleError("Please install a web3 provider like Metamask to book a ticket.");
-            return;
-        }
-        const web3 = new Web3(window.ethereum);
         const contractAddress = "0x2d2Fdb2aF9723FDFEc66354c5cF9E3Ff025FA114";
         const contractAbi = abi;
         const contract = new web3.eth.Contract(contractAbi, contractAddress);
         const totalPrice = event_price * num_tickets;
 
         try {
-            // check if user is connected to a wallet
-            if (!window.ethereum.selectedAddress) {
-                handleNoAccount();
-                return;
-            }
             const gasPrice = await web3.eth.getGasPrice();
             const gasLimit = 500000;
-
             // send the transaction to the contract
-            await contract.methods.bookTickets(event_id, num_tickets)
-                .send({ from: window.ethereum.selectedAddress, value: web3.utils.toWei(totalPrice.toString()), gasPrice: gasPrice, gasLimit: gasLimit });
+            setLoading(true);
+            const result = await contract.methods.bookTickets(event_id, num_tickets)
+                .send({ from: account, value: web3.utils.toWei(totalPrice.toString()), gasPrice: gasPrice, gasLimit: gasLimit });
+                
+            // Get returned values from result
+            const blockHash = result.events[0].returnValues[0];
+            const timestamp = result.events[0].returnValues[1];
+            const sender = result.events[0].returnValues[2];
+            const returnedEventId = result.events[0].returnValues[3];
+            const returnedTotalPrice = result.events[0].returnValues[4];
+            const tokenIds = result.events[0].returnValues[5];
 
+            // Call API to insert data into database
+            const response = await fetch('http://localhost:4000/tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tokenIds,
+                    blockHash,
+                    timestamp,
+                    sender,
+                    eventId: returnedEventId,
+                    totalPrice: returnedTotalPrice
+                })
+            });
             handleSuccess(event_name, parseInt(num_tickets));
         } catch (error) {
             handleError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <>
+            {loading && <BannerStrip
+                height="50px"
+                isCloseBtnVisible={false}
+                position="sticky"
+                text={<div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}><Loading fontSize={12} size={12} spinnerType="loader" /><Typography color="#FFFFFF" variant="caption14">Purchase is being processed ...</Typography></div>}
+                type="warning"
+            />}
             {events.length > 0 ? (
                 events.map((event, index) => (
                     <div key={event.event_id}>

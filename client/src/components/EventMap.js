@@ -49,7 +49,7 @@ function EventMap({ events, google }) {
           google={google} 
           containerStyle={{
             height: "calc(100vh - 140px)",
-            position: "relative"
+            position: "relative",
           }} 
           initialCenter={center} 
           center={center} 

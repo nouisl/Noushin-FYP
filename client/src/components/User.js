@@ -1,11 +1,15 @@
 import { Modal, Card } from "web3uikit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext} from "react";
 import { FaUser } from 'react-icons/fa';
+import { Web3Context } from '../Web3Context.js';
 import axios from "axios";
 
-function User({ account }) {
+function User() {
   const [isVisible, setVisible] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const { account } = useContext(Web3Context);
+
+  const shortAddress = account && `${account.slice(0, 6)}...${account.slice(-4)}`;
 
   useEffect(() => {
     async function fetchTransactions() {
@@ -16,16 +20,17 @@ function User({ account }) {
     fetchTransactions();
   }, [isVisible]);
 
+
   return (
     <>
-      <div onClick={() => setVisible(true)}>
-        <FaUser className="fb mx-2" />
-      </div>
+      <button className="btn btn-outline-primary logins" onClick={() => setVisible(true)}>
+        <FaUser/>
+      </button>
 
       <Modal
         onCloseButtonPressed={() => setVisible(false)}
         hasFooter={false}
-        title="Your Tickets"
+        title={`Welcome ${shortAddress}!`}
         isVisible={isVisible}
       >
         <div style={{ display: "flex", justifyContent: "start", flexWrap: "wrap", gap: "10px" }}>
@@ -34,13 +39,13 @@ function User({ account }) {
               <div style={{ width: "200px" }}>
                 <Card
                   isDisabled
-                  title={e.attributes.artist}
-                  description={e.attributes.size}
+                  title={e.event_name}
+                  description={e.event_date}
                 >
                   <div>
                     <img
                       width="180px"
-                      src={e.attributes.imgUrl}
+                      src={e.img_url}
                     />
                   </div>
                 </Card>

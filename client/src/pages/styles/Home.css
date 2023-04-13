@@ -72,7 +72,7 @@ a .sc:hover {
     margin-bottom: 2rem;
   }
   
-  .btn-primary {
+  .hpb {
     display: inline-block;
     padding: 1rem 2rem;
     background-color: white;
@@ -84,7 +84,7 @@ a .sc:hover {
     transition: background-color 0.3s ease;
   }
   
-  .btn-primary:hover {
+  .hpb:hover {
     background-color: #fff;
     color: #2E7DAF;
   }
