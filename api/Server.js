@@ -73,8 +73,6 @@ app.get("/events/sql", async (req, res) => {
     });
 });
 
-        res.send(event);
-    } catch (error) {
 // get event by id from mysql
 app.get('/events/sql/:id', async (req, res) => {
     try {
@@ -135,16 +133,21 @@ app.post('/events/:address', async (req, res) => {
     }
 });
 
-/* app.put('/events/:id', (req, res) => {
-    const id = req.params.id;
-    const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold } = req.body;
-    const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ? WHERE event_id = ?';
-    connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, id], (err, result) => {
-        if (err) throw err;
-        console.log(`Event with ID ${id} updated`);
-        res.send('Event updated');
-    });
-}); */
+app.put('/events/:id', (req, res) => {
+    try {
+        const id = req.params.id;
+        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold } = req.body;
+        const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ? WHERE event_id = ?';
+        connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, id], (err, result) => {
+            if (err) throw err;
+            console.log(`Event with ID ${id} updated`);
+            res.send('Event updated');
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // delete event in sql and on blockchain
 app.delete('/events/:id/:address', async (req, res) => {
@@ -170,7 +173,110 @@ app.delete('/events/:id/:address', async (req, res) => {
     }
 });
 
-// book ticket in sql and on blockchain
+// get tickets from mysql
+app.get("/api/tickets", async (req, res) => {
+    try {
+        let sql = "SELECT * FROM tickets";
+        connection.query(sql, (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// get tickets from mysql by address
+app.get('/tickets/:account', async (req, res) => {
+    try {
+        const account = req.params.account;
+        const sql = 'SELECT * FROM tickets WHERE customer_address = ?';
+        connection.query(sql, [account], (err, result) => {
+            if (err) throw err;
+            if (result.length === 0) {
+                return res.status(404).send('No tickets found.');
+            }
+            res.send(result[0]);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting tickets.');
+    }
+});
+
+// post tickets to mysql
+app.post('/api/tickets', async (req, res) => {
+    const { tokenIds, blockHash, timestamp, sender, eventId, totalPrice } = req.body;
+    console.log('tokenIds:', tokenIds);
+    try {
+        for (const tokenId of tokenIds) {
+            const insertQuery = 'INSERT INTO tickets(token_id, tx_hash, tx_time, value, customer_address, event_id) VALUES(?, ?, ?, ?, ?, ?)';
+            const insertValues = [tokenId, blockHash, new Date(timestamp * 1000), totalPrice / tokenIds.length, sender, eventId];
+            connection.query(insertQuery, insertValues, (error) => {
+                if (error) {
+                    console.error('Error inserting data into tickets table:', error);
+                    return;
+                }
+            });
+        }
+        res.json({ message: 'Tickets added successfully' });
+    } catch (e) {
+        console.error('Error in /api/tickets endpoint:', e);
+    }
+});
+
+app.put('/api/events/:event_id', (req, res) => {
+    const { event_id } = req.params;
+    const { num_tickets } = req.body;
+
+    const updateQuery = 'UPDATE events SET tickets_sold = tickets_sold + ? WHERE event_id = ?';
+    const updateValues = [num_tickets, event_id];
+
+    connection.query(updateQuery, updateValues, (error) => {
+        if (error) {
+            console.error('Error updating tickets_sold value:', error);
+            res.status(500).send('Error updating tickets_sold value');
+            return;
+        }
+        res.json('Updated successfully');
+    });
+});
+
+// port number
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
+
+// all blockchain functions that can be implemented if I pass user credentials from frontend to backend
+
+// get events from blockchain
+/* app.get('/events/matic', async (req, res) => {
+    try {
+        const contract = await getContract();
+        const event = await contract.methods.getEvents().call();
+        res.send(event);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting events');
+    }
+}); */
+
+// get event by id from blockchain
+app.get('/events/matic/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const contract = await getContract();
+        const event = await contract.methods.getEvent(id).call();
+        res.send(event);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting event');
+    }
+});
+
+// book ticket on blockchain
 /* app.post('/transactions/:id/:address', async (req, res) => {
     try {
         const id = req.params.id;
@@ -228,47 +334,5 @@ app.delete('/events/:id/:address', async (req, res) => {
         const totalPrice = result.price_per_ticket * num_tickets;
         console.error(web3.utils.toWei(web3.utils.toBN(totalPrice)));
         res.status(500).send('Internal Server Error');
-    }
-}); */
-
-
-// app.get('/transactions', (req, res) => {
-//     const sql = 'SELECT * FROM transactions';
-//     connection.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
-
-// port number
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-
-// all blockchain functions that can be implemented if I pass user credentials from frontend to backend
-
-// get events from blockchain
-/* app.get('/events/matic', async (req, res) => {
-    try {
-        const contract = await getContract();
-        const event = await contract.methods.getEvents().call();
-        res.send(event);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error getting events');
-    }
-}); */
-
-// get event by id from blockchain
-/* app.get('/events/matic/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const contract = await getContract();
-        const event = await contract.methods.getEvent(id).call();
-        res.send(event);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error getting event');
     }
 }); */

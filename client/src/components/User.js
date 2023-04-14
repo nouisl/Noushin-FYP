@@ -6,18 +6,26 @@ import axios from "axios";
 
 function User() {
   const [isVisible, setVisible] = useState(false);
-  const [transactions, setTransactions] = useState([]);
+  const [tickets, setTickets] = useState([]);
+  const [events, setEvents] = useState([]);
   const { account } = useContext(Web3Context);
 
   const shortAddress = account && `${account.slice(0, 6)}...${account.slice(-4)}`;
 
   useEffect(() => {
-    async function fetchTransactions() {
-      const url = `http://localhost:4000/transactions`;
+    async function fetchEvents() {
+      const url = 'http://localhost:4000/events/sql';
       const response = await axios.get(url);
-      setTransactions(response.data);
+      setEvents(response.data);
     }
-    fetchTransactions();
+    fetchEvents(category);
+
+    async function fetchTickets() {
+      const url = `http://localhost:4000/api/tickets`;
+      const response = await axios.get(url);
+      setTickets(response.data);
+    }
+    fetchTickets();
   }, [isVisible]);
 
 
@@ -34,8 +42,8 @@ function User() {
         isVisible={isVisible}
       >
         <div style={{ display: "flex", justifyContent: "start", flexWrap: "wrap", gap: "10px" }}>
-          {transactions.length > 0 ? (
-            transactions.map((e, index) => (
+          {tickets.length > 0 ? (
+            tickets.map((e, index) => (
               <div style={{ width: "200px" }}>
                 <Card
                   isDisabled

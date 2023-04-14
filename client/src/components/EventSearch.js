@@ -24,6 +24,10 @@ function EventSearch(props) {
         props.onSearch("", "", "");
     }
 
+    const handleReload = () => {
+        window.location.reload();
+    };
+
     return (
         <div className="event-search">
             <div>
