@@ -14,19 +14,7 @@ function Event() {
   const [category, setCategory] = useState('');
   const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setCategory(params.get('category') || '');
-  }, [location.search]);
-
-  useEffect(() => {
-    async function fetchEvents(category) {
-      const url = category ? `http://localhost:4000/events/sql?category=${category}` : 'http://localhost:4000/events/sql';
-      const response = await axios.get(url);
-      setEvents(response.data);
-    }
-    fetchEvents(category);
-  }, [category]);
+  
 
   const handleSearch = async (searchValue, dateValue, cityValue) => {
     let url = `http://localhost:4000/events/sql?name=${searchValue}&date=${dateValue}`;
@@ -42,7 +30,7 @@ function Event() {
       <Header />
       {/* <div className="categories">
         <Categories />
-      </div> */}
+      </div>  */}
       <div className="home-event-bg">
         <div className="event-search-card">
           <div className="card-body">

@@ -1,0 +1,18 @@
+.card-col {
+    color: #0f71c3 !important;
+}
+
+.user-card {
+    background-color: #eff7ff !important;
+    border-radius: 4%;
+}
+
+.user-card:hover {
+    border-radius: 4px;
+    box-shadow: 0 2px 4px #bdd8f0 !important;
+    background-color: #fff;
+}
+
+.linknft {
+    text-decoration: none;
+}

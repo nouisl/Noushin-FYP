@@ -5,7 +5,7 @@ a {
 
 .searchReminder {
     width: 400px;
-    border: 1.5px solid rgb(242, 242, 242);
+    border: 1.5px solid #f2f2f2;
     border-radius: 100px;
     height: 45px;
     display: flex;
@@ -13,7 +13,7 @@ a {
     align-items: center;
     padding-left: 30px;
     padding-right: 5px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: #00000059 0px 5px 15px;
 }
 
 .filter {
@@ -23,7 +23,7 @@ a {
 }
 
 .event-search-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px #00000033;
 }
 
 .card-title {
@@ -43,7 +43,7 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 4%;
-    color: #fff;
+    color: white;
     overflow: scroll;
 }
 
@@ -60,13 +60,13 @@ a {
 }
 
 .event-search-card {
-    border: 1px solid #dee2e6;
+  
     margin-bottom: 3%;
 }
 
 .card-body {
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #0000001a;
     background-color: #fff;
 }
 
@@ -81,7 +81,7 @@ a {
     justify-content: center;
     height: calc(100vh - 110px);
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px #0000001a;
 }
 
 .eventContentL {
@@ -94,4 +94,3 @@ a {
 .eventContentR {
     width:40%;
 }
-

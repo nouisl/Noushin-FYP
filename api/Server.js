@@ -10,7 +10,7 @@ require('dotenv').config();
 //const contractAddress = ""; //goerli
 const provider = new Web3('https://rpc-mumbai.maticvigil.com/');
 const web3 = new Web3(provider);
-const contractAddress = "0x2d2Fdb2aF9723FDFEc66354c5cF9E3Ff025FA114";
+const contractAddress = "0x3aAe5F3494f5FC0a21CD62ea81A2081F0d6DAebd";
 app.use(express.json());
 app.use(cors());
 
@@ -102,6 +102,24 @@ app.get('/events/cities', async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
+    }
+});
+
+// get all unique cities from mysql
+app.get('/events/sql/:cat', async (req, res) => {
+    try {
+        const cat = req.params.cat;
+        const sql = 'SELECT * FROM events WHERE category = ?';
+        connection.query(sql, [cat], (err, result) => {
+            if (err) throw err;
+            if (result.length === 0) {
+                return res.status(404).send('Event not found');
+            }
+            res.send(result[0]);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting event');
     }
 });
 

@@ -1,17 +1,25 @@
 import './styles/Categories.css';
-import { FaBriefcase } from 'react-icons/fa';
+import { useState } from "react";
+import { FaStar } from 'react-icons/fa';
+import { FaPlane } from 'react-icons/fa';
 import { FaFutbol } from 'react-icons/fa';
 import { FaMusic } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa';
 
-function Categories() {
+function Categories(props) {
+    const [category, setCategory] = useState("");
+
     return (
         <div className="categories-container">
-            <label aria-hidden="false">
+            <label aria-hidden="false" value={category} onClick={(e) => setCategory(e.target.value)}>
+                <FaStar size={48} />
+                <span>All</span>
+            </label>
+            <label aria-hidden="false" value={category} onClick={(e) => setCategory(e.target.value)}>
                 <FaUsers size={48} />
                 <span>Festival</span>
             </label>
-            <label aria-hidden="false">
+            <label aria-hidden="false" value={category} onClick={(e) => setCategory(e.target.value)}> 
                 <FaMusic size={48} />
                 <span>Concert</span>
             </label>
@@ -20,8 +28,8 @@ function Categories() {
                 <span>Sport</span>
             </label>
             <label aria-hidden="false">
-                <FaBriefcase size={48} />
-                <span>Business</span>
+                <FaPlane size={48} />
+                <span>Travel</span>
             </label>
         </div>
     );

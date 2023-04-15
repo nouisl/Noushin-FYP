@@ -36,6 +36,11 @@ function Header() {
             <img className="logo" src={logo} alt="logo"></img>
           </Link>
         </div>
+        {/* <div className="legend">
+          <Link to="/event">
+            <p>Events</p>
+          </Link>
+        </div> */}
         <div className="connect">
           {account &&
             <User />

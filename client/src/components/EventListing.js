@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useNotification, Input, BannerStrip, Loading, Typography } from "web3uikit";
 import { Web3Context } from '../Web3Context.js';
+import { contractAddress } from '../contract.js';
 import './styles/EventListing.css';
 
 
@@ -48,7 +49,6 @@ function EventListing(props) {
     };
 
     const bookTicket = async function (event_id, event_name, event_price, num_tickets) {
-        const contractAddress = "0x2d2Fdb2aF9723FDFEc66354c5cF9E3Ff025FA114";
         const contractAbi = abi;
         const contract = new web3.eth.Contract(contractAbi, contractAddress);
         const totalPrice = event_price * num_tickets;
