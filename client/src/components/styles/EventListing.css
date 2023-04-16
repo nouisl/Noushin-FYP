@@ -14,6 +14,7 @@
 .eventDiv {
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .eventTitle {
@@ -36,7 +37,7 @@
 
 .price {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     gap: 5px;
     color: #808080;
     font-size: 12px;

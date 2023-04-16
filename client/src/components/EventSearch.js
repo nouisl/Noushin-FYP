@@ -6,7 +6,9 @@ function EventSearch(props) {
     const [searchValue, setSearchValue] = useState("");
     const [dateValue, setDateValue] = useState("");
     const [cityValue, setCityValue] = useState("");
+    const [catValue, setCatValue] = useState("");
     const [cities, setCities] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         async function fetchCities() {
@@ -15,12 +17,19 @@ function EventSearch(props) {
             setCities(cityNames);
         }
         fetchCities();
+        async function fetchCategories() {
+            const response = await axios.get('http://localhost:4000/events/categories');
+            const cats = response.data.map(catObj => catObj.category);
+            setCategories(cats);
+        }
+        fetchCategories();
     }, []);
 
     function handleReset() {
         setSearchValue("");
         setDateValue("");
         setCityValue("");
+        setCatValue("");
         props.onSearch("", "", "");
     }
 
@@ -55,6 +64,16 @@ function EventSearch(props) {
                         <option key={city} value={city}>{city}</option>
                     ))}
                 </select>
+                <select
+                    value={catValue}
+                    onChange={(e) => setCatValue(e.target.value)}
+                    style={{ margin: '1rem', width: '18rem', height: '2rem', fontSize: '1rem' }}
+                >
+                    <option value="">All categories</option>
+                    {categories.map(category => (
+                        <option key={category} value={category}>{category}</option>
+                    ))}
+                </select>
             </div>
             <button
                 type="button"
@@ -66,7 +85,7 @@ function EventSearch(props) {
             </button>
             <button
                 className="btn btn-outline-danger"
-                onClick={() => props.onSearch(searchValue, dateValue, cityValue)}
+                onClick={() => props.onSearch(searchValue, dateValue, cityValue, catValue)}
                 style={{ margin: '1rem' }}
             >
                 <FaSearch />

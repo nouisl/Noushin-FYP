@@ -8,11 +8,20 @@ function EventMap({ events, google }) {
   const [locations, setLocations] = useState([]);
   const [center, setCenter] = useState();
   const [error, setError] = useState("");
+  const [zoom, setZoom] = useState(5);
+
+  // Update the zoom level when the events are filtered
+  useEffect(() => {
+    if (events.length > 3) {
+      setZoom(4); // Set the zoom level to a more zoomed-in value when events are filtered
+    } else {
+      setZoom(10); // Set the zoom level back to the initial value when all events are shown
+    }
+  }, [events]);
 
   useEffect(() => {
     const getLocations = async () => {
       const newLocations = [];
-
       for (const event of events) {
         const address = `${event.venue}, ${event.city}`;
 
@@ -27,7 +36,6 @@ function EventMap({ events, google }) {
           setError("There was an error fetching location information.");
         }
       }
-
       setLocations(newLocations);
 
       if (newLocations.length > 0) {
@@ -45,15 +53,15 @@ function EventMap({ events, google }) {
       {error ? (
         <p>{error}</p>
       ) : center ? (
-        <Map 
-          google={google} 
+        <Map
+          google={google}
           containerStyle={{
             height: "calc(100vh - 140px)",
             position: "relative",
-          }} 
-          initialCenter={center} 
-          center={center} 
-          zoom={13} 
+          }}
+          initialCenter={center}
+          center={center}
+          zoom={zoom}
           disableDefaultUI={true}
         >
           {locations.map((location, index) => (

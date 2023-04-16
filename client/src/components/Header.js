@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./styles/Header.css";
 import logo from "../images/banner.png";
-import { useNotification } from "web3uikit";
+import { useNotification, Dropdown } from "web3uikit";
 import { useContext } from "react";
 import { Web3Context } from '../Web3Context.js';
 import User from "./User.js";
@@ -36,10 +36,15 @@ function Header() {
             <img className="logo" src={logo} alt="logo"></img>
           </Link>
         </div>
-        {/* <div className="legend">
-          <Link to="/event">
-            <p>Events</p>
-          </Link>
+        {/* <div className="dropdown">
+          <button className="dropbtn"> Menu: </button>
+          <div className="dropdown-content">
+            <a>Home</a>
+            <a>Events</a>
+            <a>About Us</a>
+            <a>FAQ</a>
+            <a>Privacy Policy</a>
+          </div>
         </div> */}
         <div className="connect">
           {account &&

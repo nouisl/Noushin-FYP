@@ -53,9 +53,9 @@ app.get('/', (req, res) => {
 
 // get events from mysql
 app.get("/events/sql", async (req, res) => {
-    const { name, date, city } = req.query;
+    const { name, date, city, category } = req.query;
     let sql = "SELECT * FROM events";
-    if (name || date || city) {
+    if (name || date || city || category) {
         sql += " WHERE";
         if (name) {
             sql += ` event_name LIKE '%${name}%'`;
@@ -65,6 +65,9 @@ app.get("/events/sql", async (req, res) => {
         }
         if (city) {
             sql += `${name || date ? " AND" : ""} city = '${city}'`;
+        }
+        if (category) {
+            sql += `${name || date || city ? " AND" : ""} category = '${category}'`;
         }
     }
     connection.query(sql, (err, result) => {
@@ -105,21 +108,17 @@ app.get('/events/cities', async (req, res) => {
     }
 });
 
-// get all unique cities from mysql
-app.get('/events/sql/:cat', async (req, res) => {
+// get all unique categories from mysql
+app.get('/events/categories', async (req, res) => {
     try {
-        const cat = req.params.cat;
-        const sql = 'SELECT * FROM events WHERE category = ?';
-        connection.query(sql, [cat], (err, result) => {
+        const sql = 'SELECT DISTINCT category FROM events';
+        connection.query(sql, (err, result) => {
             if (err) throw err;
-            if (result.length === 0) {
-                return res.status(404).send('Event not found');
-            }
-            res.send(result[0]);
+            res.json(result);
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error getting event');
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
     }
 });
 
@@ -127,10 +126,10 @@ app.get('/events/sql/:cat', async (req, res) => {
 app.post('/events/:address', async (req, res) => {
     try {
         const address = req.params.address;
-        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer } = req.body;
-        const sql = 'INSERT INTO events (event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category } = req.body;
+        const sql = 'INSERT INTO events (event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const result = await new Promise((resolve, reject) => {
-            connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer], (err, result) => {
+            connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category], (err, result) => {
                 if (err) reject(err);
                 resolve(result);
             });
@@ -154,9 +153,9 @@ app.post('/events/:address', async (req, res) => {
 app.put('/events/:id', (req, res) => {
     try {
         const id = req.params.id;
-        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold } = req.body;
-        const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ? WHERE event_id = ?';
-        connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, id], (err, result) => {
+        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category } = req.body;
+        const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ?, category = ? WHERE event_id = ?';
+        connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category ], (err, result) => {
             if (err) throw err;
             console.log(`Event with ID ${id} updated`);
             res.send('Event updated');
