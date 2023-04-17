@@ -2,17 +2,15 @@ const express = require('express');
 const mysql = require('mysql2');
 const Web3 = require('web3');
 const cors = require('cors');
-const axios = require('axios');
 const app = express();
 const port = 4000;
 require('dotenv').config();
 
-//const contractAddress = ""; //goerli
 const provider = new Web3('https://rpc-mumbai.maticvigil.com/');
 const web3 = new Web3(provider);
-const contractAddress = "0x3aAe5F3494f5FC0a21CD62ea81A2081F0d6DAebd";
+const contractAddress = process.env.CONTRACT_ADDRESS;
 app.use(express.json());
-app.use(cors());
+app.use(cors()); 
 
 
 // create connection to mysql db
