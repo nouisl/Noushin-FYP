@@ -45,19 +45,19 @@ function EventSearch(props) {
                     placeholder="Search by name"
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    style={{ margin: '1rem', width: '18rem', height: '2rem', fontSize: '1rem' }}
+                    style={{ margin: '1rem', width: '13rem', height: '2rem', fontSize: '1rem' }}
                 />
                 <input
                     type="date"
                     placeholder="Filter by date"
                     value={dateValue}
                     onChange={(e) => setDateValue(e.target.value)}
-                    style={{ margin: '1rem', width: '18rem', height: '2rem', fontSize: '1rem' }}
+                    style={{ margin: '1rem', width: '13rem', height: '2rem', fontSize: '1rem' }}
                 />
                 <select
                     value={cityValue}
                     onChange={(e) => setCityValue(e.target.value)}
-                    style={{ margin: '1rem', width: '18rem', height: '2rem', fontSize: '1rem' }}
+                    style={{ margin: '1rem', width: '13rem', height: '2rem', fontSize: '1rem' }}
                 >
                     <option value="">All cities</option>
                     {cities.map(city => (
@@ -67,7 +67,7 @@ function EventSearch(props) {
                 <select
                     value={catValue}
                     onChange={(e) => setCatValue(e.target.value)}
-                    style={{ margin: '1rem', width: '18rem', height: '2rem', fontSize: '1rem' }}
+                    style={{ margin: '1rem', width: '13rem', height: '2rem', fontSize: '1rem' }}
                 >
                     <option value="">All categories</option>
                     {categories.map(category => (

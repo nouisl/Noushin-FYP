@@ -1,4 +1,4 @@
-import { Modal, Card, Button } from "web3uikit";
+import { Modal, Button } from "web3uikit";
 import { useState, useEffect, useContext } from "react";
 import { FaUser } from 'react-icons/fa';
 import { Web3Context } from '../Web3Context.js';
@@ -33,7 +33,7 @@ function User() {
       setTickets(customerTickets);
     }
     fetchData();
-  }, [isVisible]);
+  }, [account, isVisible]);
 
 
   return (
@@ -60,7 +60,7 @@ function User() {
                   <p className="card-col">{new Date(ticket.eventDate).toLocaleDateString()} at{" "} {ticket.eventTime}
                     <br />{ticket.eventLocation}</p>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: 'center' }}>
-                    <a className="linknft" href={ticket.tokenLink} ><Button theme="primary" text="View NFT" /></a>
+                    <a className="linknft" href={ticket.tokenLink} target="_blank" rel="noreferrer"><Button theme="primary" text="View NFT" /></a>
                   </div>
                 </div>
               </div>

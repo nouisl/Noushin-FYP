@@ -1,12 +1,12 @@
 import './styles/Home.css';
-import { useContext } from "react";
-import { Web3Context } from '../Web3Context.js';
+// import { useContext } from "react";
+// import { Web3Context } from '../Web3Context.js';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import logo from "../images/logo7.png"
+import logo from "../images/logo.png"
 
 function Home() {
-  const { account, loadWeb3, handleLogout } = useContext(Web3Context);
+  // const { account, loadWeb3, handleLogout } = useContext(Web3Context);
 
   return (
     <>

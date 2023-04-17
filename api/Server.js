@@ -150,6 +150,7 @@ app.post('/events/:address', async (req, res) => {
     }
 });
 
+// put event by id in mysql
 app.put('/events/:id', (req, res) => {
     try {
         const id = req.params.id;
@@ -243,6 +244,7 @@ app.post('/api/tickets', async (req, res) => {
     }
 });
 
+// put ticket_sold in mysql by id
 app.put('/api/events/:event_id', (req, res) => {
     const { event_id } = req.params;
     const { num_tickets } = req.body;

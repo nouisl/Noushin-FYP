@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import { useState, useEffect} from "react";
 import axios from "axios";
 import { useLocation } from "react-router";
-import Categories from "../components/Categories";
 import EventSearch from "../components/EventSearch";
 import EventListing from "../components/EventListing";
 import EventMap from "../components/EventMap";

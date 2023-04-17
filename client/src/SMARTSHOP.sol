@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract WebTicketing is ERC721URIStorage {
     address public owner;
     uint256 public maxEventId;
+    uint256 public nextTokenId;
 
     struct Event {
         string name;
@@ -25,13 +26,26 @@ contract WebTicketing is ERC721URIStorage {
     mapping(uint256 => Event) events;
     mapping(uint256 => bool) public eventIds;
 
-    constructor() ERC721("WebTicketing", "TICKET") {
+    constructor() ERC721("Ticket3", "TKT") {
         owner = msg.sender;
     }
 
+    function generateTokenId() internal returns (uint256) {
+        uint256 tokenId = nextTokenId;
+        nextTokenId++;
+        return tokenId;
+    }
+
     function createEvent(
-        uint256 eventId, string memory name, uint256 totalTickets, uint256 pricePerTicket) public {
-        require(msg.sender == owner, "Only owner of smart contract can create events");
+        uint256 eventId,
+        string memory name,
+        uint256 totalTickets,
+        uint256 pricePerTicket
+    ) public {
+        require(
+            msg.sender == owner,
+            "Only owner of smart contract can create events"
+        );
         require(!eventIds[eventId], "Event ID already exists");
         Event storage newEvent = events[eventId];
         newEvent.name = name;
@@ -44,18 +58,43 @@ contract WebTicketing is ERC721URIStorage {
         }
     }
 
-    function bookTickets(uint256 eventId, uint256 numTickets) public payable returns (bytes32, uint256, address, uint256, uint256, uint256[] memory) {
+    function bookTickets(uint256 eventId, uint256 numTickets)
+        public
+        payable
+        returns (
+            bytes32,
+            uint256,
+            address,
+            uint256,
+            uint256,
+            uint256[] memory
+        )
+    {
         require(events[eventId].exists, "Event does not exist");
-        require(events[eventId].totalTickets >= numTickets, "Not enough tickets available");
-        uint256 totalPrice = events[eventId].pricePerTicket * 1 ether * numTickets;
-        require(msg.value == totalPrice, string(abi.encodePacked("Insufficient funds. You sent: ", msg.value, ", but the total price is: ", totalPrice)));
-       
+        require(
+            events[eventId].totalTickets >= numTickets,
+            "Not enough tickets available"
+        );
+        uint256 totalPrice = events[eventId].pricePerTicket *
+            1 ether *
+            numTickets;
+        require(
+            msg.value == totalPrice,
+            string(
+                abi.encodePacked(
+                    "Insufficient funds. You sent: ",
+                    msg.value,
+                    ", but the total price is: ",
+                    totalPrice
+                )
+            )
+        );
+
         uint256[] memory tokenIds = new uint256[](numTickets);
         string[] memory tokenURIs = new string[](numTickets);
 
         for (uint256 i = 0; i < numTickets; i++) {
-            bytes32 hash = keccak256(abi.encodePacked(eventId * 10000 + events[eventId].totalTickets));
-            uint256 tokenId = uint256(hash);
+            uint256 tokenId = generateTokenId();
             _mint(msg.sender, tokenId);
             _setTokenURI(tokenId, tokenURI(tokenId));
 
@@ -63,25 +102,55 @@ contract WebTicketing is ERC721URIStorage {
             tokenURIs[i] = tokenURI(tokenId);
             events[eventId].totalTickets--;
 
-            emit newTicketsBooked(eventId, msg.sender, tokenId, block.timestamp);
+            emit newTicketsBooked(
+                eventId,
+                msg.sender,
+                tokenId,
+                block.timestamp
+            );
         }
 
         address sender = msg.sender;
         payable(owner).transfer(msg.value);
-        return (blockhash(block.number), block.timestamp, sender, eventId, totalPrice, tokenIds);
+        return (
+            blockhash(block.number),
+            block.timestamp,
+            sender,
+            eventId,
+            totalPrice,
+            tokenIds
+        );
     }
 
-    function getEvent(uint256 eventId) public view returns (string memory, uint256, uint256, bool){
+    function getEvent(uint256 eventId)
+        public
+        view
+        returns (
+            string memory,
+            uint256,
+            uint256,
+            bool
+        )
+    {
         Event memory e = events[eventId];
         return (e.name, e.totalTickets, e.pricePerTicket, e.exists);
     }
 
-    /*function getEvents() public view returns (Event[] memory) {
-        
-    }*/
+    function getEvents() public view returns (Event[] memory) {
+        Event[] memory allEvents = new Event[](maxEventId + 1);
+        for (uint256 i = 0; i <= maxEventId; i++) {
+            if (eventIds[i]) {
+                allEvents[i] = events[i];
+            }
+        }
+        return allEvents;
+    }
 
     function deleteEvent(uint256 eventId) public {
-        require(msg.sender == owner, "Only owner of smart contract can delete events");
+        require(
+            msg.sender == owner,
+            "Only owner of smart contract can delete events"
+        );
         require(events[eventId].exists, "Event does not exist");
 
         uint256[] memory tokensToRemove = new uint256[](
