@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from "react";
+// imports
+import { useState, useEffect } from "react";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 import Geocode from "react-geocode";
 
+// set the API key for the Geocode library
 Geocode.setApiKey("AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE");
 
 function EventMap({ events, google }) {
+  // create state variables for locations, center, error, and zoom
   const [locations, setLocations] = useState([]);
   const [center, setCenter] = useState();
   const [error, setError] = useState("");
   const [zoom, setZoom] = useState(5);
 
-  // Update the zoom level when the events are filtered
+  // update the zoom level when the events are filtered
   useEffect(() => {
     if (events.length > 3) {
-      setZoom(4); // Set the zoom level to a more zoomed-in value when events are filtered
+      setZoom(4); 
     } else {
-      setZoom(10); // Set the zoom level back to the initial value when all events are shown
+      setZoom(10); 
     }
   }, [events]);
 
+  // fetch location information for each event using the Geocode library
   useEffect(() => {
     const getLocations = async () => {
       const newLocations = [];
@@ -38,6 +42,7 @@ function EventMap({ events, google }) {
       }
       setLocations(newLocations);
 
+      // calculate the average latitude and longitude values and update the center state
       if (newLocations.length > 0) {
         const avgLat = newLocations.reduce((acc, loc) => acc + loc.lat, 0) / newLocations.length;
         const avgLng = newLocations.reduce((acc, loc) => acc + loc.lng, 0) / newLocations.length;
@@ -47,7 +52,8 @@ function EventMap({ events, google }) {
 
     getLocations();
   }, [events]);
-
+  
+  // return a div containing either an error message, a map or a loading message
   return (
     <div>
       {error ? (
@@ -75,6 +81,7 @@ function EventMap({ events, google }) {
   );
 }
 
+// wrap the EventMap component in a GoogleApiWrapper with an API key
 export default GoogleApiWrapper({
   apiKey: "AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE",
 })(EventMap);

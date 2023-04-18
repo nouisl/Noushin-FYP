@@ -1,10 +1,10 @@
 h1, h2 {
-    color: white;
-    font-weight: 700;
+  color: white;
+  font-weight: 700;
 }
 
 .logo {
-    height: calc(10vw*0.3)
+  height: calc(10vw*0.3)
 }
 
 
@@ -31,65 +31,65 @@ h1, h2 {
 }
 
 .col {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 button {
-    padding: 10px 20px;
-    background-color:#F2F6FF;
-    color: #2E7DAF;
-    font-size: 16px;
-    cursor: pointer;
-    width: 200px;
-    height: 40px;
+  padding: 10px 20px;
+  background-color:#F2F6FF;
+  color: #2E7DAF;
+  font-size: 16px;
+  cursor: pointer;
+  width: 200px;
+  height: 40px;
 }
 
 a .sc {
-    color: black;
+  color: black;
 }
 
 a .sc:hover {
-    color: #2E7DAF;
+  color: #2E7DAF;
 }
 
 .home {
-    height: 90vh;
-    background: linear-gradient(to bottom, #2E7DAF 0%, #23158c 100%);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    color: #fff;
-  }
+  height: 90vh;
+  background: linear-gradient(to bottom, #2E7DAF 0%, #23158c 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  color: #fff;
+}
   
-  .home h1 {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-  }
+.home h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
   
-  .home p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
+.home p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
   
-  .hpb {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background-color: white;
-    color: #084984;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 50px;
-    transition: background-color 0.3s ease;
-  }
+.hpb {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: white;
+  color: #084984;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+}
   
-  .hpb:hover {
-    background-color: #fff;
-    color: #2E7DAF;
-  }
+.hpb:hover {
+  background-color: #fff;
+  color: #2E7DAF;
+}
    
-  .home-logo img {
-    max-height: 30rem;
-  }
+.home-logo img {
+  max-height: 30rem;
+}
   

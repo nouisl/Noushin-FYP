@@ -4,7 +4,6 @@ import Footer from "./Footer";
 
 // AboutUs component
 function AboutUs() {
-
   // return a JSX element representing the About Us page
   return (
     <>
@@ -42,6 +41,5 @@ function AboutUs() {
     </>
   );
 }
-
 // export the AboutUs component
 export default AboutUs;

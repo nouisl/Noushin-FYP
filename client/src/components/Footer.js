@@ -1,10 +1,11 @@
+// import necessary components and libraries
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import './styles/Footer.css';
 
-
+// Footer component
 function Footer() {
-
+  // return the footer component containing links to pages and social media
   return (
     <>
       <footer className="footer">
@@ -19,6 +20,7 @@ function Footer() {
               <Link to="/privacy" className="mx-2 text-muted">Privacy</Link>
             </div>
           </div>
+          {/* Display links to social media pages using icons */}
           <div className="footer-sns text-muted">
             <a href="www.facebook.com">
               <FaFacebook className="fb mx-2" />
@@ -35,5 +37,5 @@ function Footer() {
     </>
   );
 };
-
+// export the Footer component
 export default Footer;

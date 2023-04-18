@@ -1,15 +1,16 @@
+// import styles and components
 import './styles/Home.css';
-// import { useContext } from "react";
-// import { Web3Context } from '../Web3Context.js';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import logo from "../images/logo.png"
 
+// Home page component
 function Home() {
-  // const { account, loadWeb3, handleLogout } = useContext(Web3Context);
-
+  
+  // return a JSX element representing the Home page
   return (
     <>
+    {/* Header component */}
       <Header />
       <div class="home">
         <div class="home-content">
@@ -21,9 +22,11 @@ function Home() {
           <img src={logo} alt="Logo" />
         </div>
       </div>
+      {/* Footer component */}
       <Footer />
     </>
   );
 };
 
+// export the Home page component
 export default Home;

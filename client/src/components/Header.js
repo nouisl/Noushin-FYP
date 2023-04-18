@@ -1,3 +1,4 @@
+// import necessary components and libraries
 import { Link } from "react-router-dom";
 import "./styles/Header.css";
 import logo from "../images/banner.png";
@@ -6,11 +7,15 @@ import { useContext } from "react";
 import { Web3Context } from '../Web3Context.js';
 import User from "./User.js";
 
+// Header component
 function Header() {
+  // use the useNotification hook to display notifications
   const dispatch = useNotification();
+  // use the useContext hook to access the Web3Context
   const { account, loadWeb3, handleLogout } = useContext(Web3Context);
 
-  const loginMsg = (acc) => {
+  // define a function to display a login notification
+  const loginMsg = () => {
     dispatch({
       type: "success",
       message: "Welcome! You have been logged in successfully",
@@ -19,6 +24,7 @@ function Header() {
     });
   };
 
+  // define a function to display a logout notification
   const logoutMsg = () => {
     dispatch({
       type: "info",
@@ -27,7 +33,7 @@ function Header() {
       position: "topL",
     });
   };
-
+  // return a header element containing a logo and login/logout buttons
   return (
     <>
       <header className="banner">
@@ -47,15 +53,13 @@ function Header() {
           </div>
         </div> */}
         <div className="connect">
-          {account &&
-            <User />
-          }
+          {/* If the user is logged in, display the User component */}
+          {account && <User />}
+          {/* If the user is not logged in, display a button to connect wallet */}
           {!account &&
             <button className="btn btn-primary login" onClick={() => { loadWeb3(); loginMsg(); }}>Connect Wallet</button>
           }
-          {/* {account &&
-              <button className="btn btn-outline-primary login logins">{account}</button>
-          }  */}
+          {/* If the user is logged in, display a button to logout */}
           {account &&
             <button className="btn btn-danger logout" onClick={() => { handleLogout(); logoutMsg(); }}>Logout</button>
           }
@@ -64,5 +68,5 @@ function Header() {
     </>
   );
 };
-
+// export the Header component
 export default Header;

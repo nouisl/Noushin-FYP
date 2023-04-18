@@ -1,19 +1,21 @@
+// import hooks, styles and components
 import { useState, useContext } from "react";
 import { useNotification, Input, BannerStrip, Loading, Typography } from "web3uikit";
 import { Web3Context } from '../Web3Context.js';
 import { contractAddress } from '../contract.js';
 import './styles/EventListing.css';
 
-
+// EventListing component
 function EventListing(props) {
     const { events } = props;
     const dispatch = useNotification();
+    // define state for num_tickets and loading
     const [num_tickets, setNumTickets] = useState(1);
     const abi = require("../contractABI.json");
     const { web3, account } = useContext(Web3Context);
     const [loading, setLoading] = useState(false);
 
-    // Update the num_tickets value for a specific event
+    // update the num_tickets value for a specific event
     const handleNumTicketsChange = (event_id, value) => {
         setNumTickets((prevNumTickets) => ({
             ...prevNumTickets,
@@ -21,6 +23,7 @@ function EventListing(props) {
         }));
     };
 
+    // define handleSuccess function to dispatch success notification
     const handleSuccess = (event_name, num_tickets) => {
         dispatch({
             type: "success",
@@ -30,6 +33,7 @@ function EventListing(props) {
         });
     };
 
+    // define handleError function to dispatch error notification
     const handleError = (msg) => {
         dispatch({
             type: "error",
@@ -39,6 +43,7 @@ function EventListing(props) {
         });
     };
 
+    // define handleNoAccount function to dispatch error notification for no account
     const handleNoAccount = () => {
         dispatch({
             type: "error",
@@ -48,9 +53,12 @@ function EventListing(props) {
         });
     };
 
+    // define the bookTicket function
     const bookTicket = async function (event_id, event_name, event_price, num_tickets) {
+        // create a contract instance using the ABI and contract address
         const contractAbi = abi;
         const contract = new web3.eth.Contract(contractAbi, contractAddress);
+        // calculate the total price
         const totalPrice = event_price * num_tickets;
 
         try {
@@ -61,31 +69,31 @@ function EventListing(props) {
             const result = await contract.methods.bookTickets(event_id, num_tickets)
                 .send({ from: account, value: web3.utils.toWei(totalPrice.toString()), gasPrice: gasPrice, gasLimit: gasLimit });
 
-            /// Get the newTicketsBooked events from the result object
+            /// get the newTicketsBooked events from the result object
             let newTicketsBookedEvents = result.events.newTicketsBooked;
 
-            // Check if newTicketsBookedEvents is an array
+            // check if newTicketsBookedEvents is an array
             if (!Array.isArray(newTicketsBookedEvents)) {
-                // If it's not an array, wrap it in an array
+                // if it's not an array, wrap it in an array
                 newTicketsBookedEvents = [newTicketsBookedEvents];
             }
 
-            // Create an array to store the tokenIds
+            // create an array to store the tokenIds
             const tokenIds = [];
 
-            // Initialize variables to store the sender and timestamp values
+            // initialize variables to store the sender and timestamp values
             let timestamp;
 
-            // Loop through the newTicketsBooked events and get the values emitted by each event
+            // loop through the newTicketsBooked events and get the values emitted by each event
             for (const event of newTicketsBookedEvents) {
                 const tokenId = event.returnValues.tokenId;
                 timestamp = event.returnValues.timestamp;
 
-                // Add the tokenId to the tokenIds array
+                // add the tokenId to the tokenIds array
                 tokenIds.push(tokenId);
             }
 
-            // Call API to insert data into database
+            // call API to insert data into database
             const response = await fetch('http://localhost:4000/api/tickets', {
                 method: 'POST',
                 headers: {
@@ -101,6 +109,7 @@ function EventListing(props) {
                 })
             });
 
+            // call API to update data in database
             const update = await fetch(`http://localhost:4000/api/events/${event_id}`, {
                 method: 'PUT',
                 headers: {
@@ -109,16 +118,21 @@ function EventListing(props) {
                 body: JSON.stringify({ num_tickets }),
             });
 
+            // call handleSuccess function to dispatch success notification
             handleSuccess(event_name, parseInt(num_tickets));
         } catch (error) {
+            // call handleError function to dispatch error notification
             handleError(error.message);
         } finally {
+            // set loading state to false
             setLoading(false);
         }
     };
 
+    // return JSX for the EventListing component
     return (
         <>
+            {/* if the loading state is true, display a banner strip with a loading spinner and text */}
             {loading && <BannerStrip
                 height="50px"
                 isCloseBtnVisible={false}
@@ -126,13 +140,14 @@ function EventListing(props) {
                 text={<div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}><Loading fontSize={12} size={12} spinnerType="loader" /><Typography color="#FFFFFF" variant="caption14">Purchase is being processed ...</Typography></div>}
                 type="warning"
             />}
+            {/* if there are events in the events array, map over the array and display information about each event */}
             {events.length > 0 ? (
                 events.map((event, index) => (
                     <div key={event.event_id}>
                         <div className="eventDiv">
                             <img className="eventImg" src={event.img_url} alt="Event" />
                             <div className="eventInfo">
-                                <div className="eventTitle">{event.event_name}</div>
+                                <div className="eventTitle" style={{ fontWeight: "bold" }}>{event.event_name}</div>
                                 <p>{event.event_description}</p>
                                 <p>
                                     <small className="text-muted">
@@ -155,7 +170,7 @@ function EventListing(props) {
                                     />
                                 </div>
                                 <div className="bookButton">
-                                    { num_tickets[event.event_id] + event.tickets_sold <= event.total_tickets && <button
+                                    {num_tickets[event.event_id] + event.tickets_sold <= event.total_tickets && <button
                                         onClick={() => {
                                             if (account) {
                                                 bookTicket(
@@ -168,14 +183,11 @@ function EventListing(props) {
                                                 handleNoAccount()
                                             }
                                         }}
-                                        /* to={`/event/${event.event_id}`} */
                                         text="Book Ticket"
                                         className="btn btn-danger"
                                     >   Book Ticket
                                     </button>}
-                                    {num_tickets[event.event_id] + event.tickets_sold > event.total_tickets && <button className="btn btn-secondary disabled">Sold out
-                                    </button>
-                                    }
+                                    {num_tickets[event.event_id] + event.tickets_sold > event.total_tickets && <button className="btn btn-secondary disabled">Sold out</button>}
                                     <div className="price">
                                         {event.price_per_ticket} MATIC / Ticket
                                     </div>
@@ -191,5 +203,5 @@ function EventListing(props) {
         </>
     );
 }
-
+// export the EventListing component
 export default EventListing;
