@@ -3,6 +3,7 @@ import './styles/Home.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import logo from "../images/logo.png"
+import { Link } from "react-router-dom";
 
 // Home page component
 function Home() {
@@ -16,7 +17,7 @@ function Home() {
         <div class="home-content">
           <h1>Buy and discover the tickets of tomorrow</h1>
           <p>Ticket3 is an innovative web ticketing solution that uses Blockchain technology to solve the problem of ticket fraud.</p>
-          <a href="/event" class="btn-primary hpb">Explore Events</a>
+          <Link to="/event" className="btn-primary hpb">Explore Events</Link>
         </div>
         <div class="home-logo">
           <img src={logo} alt="Logo" />

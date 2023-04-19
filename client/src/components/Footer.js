@@ -22,13 +22,13 @@ function Footer() {
           </div>
           {/* Display links to social media pages using icons */}
           <div className="footer-sns text-muted">
-            <a href="www.facebook.com">
+            <a href="www.facebook.com" target="_blank" rel="noreferrer">
               <FaFacebook className="fb mx-2" />
             </a>
-            <a href="www.instagram.com">
+            <a href="https://www.instagram.com/noushin_isl/?hl=en" target="_blank" rel="noreferrer">
               <FaInstagram className="ig mx-2" />
             </a>
-            <a href="https://www.linkedin.com/in/noushin-islam-bz/">
+            <a href="https://www.linkedin.com/in/noushin-islam-bz/" target="_blank" rel="noreferrer">
               <FaLinkedinIn className="li mx-2" />
             </a>
           </div>

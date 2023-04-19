@@ -1,10 +1,11 @@
 // imports
 import { useState, useEffect } from "react";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import { mapsApi } from '../contract.js';
 import Geocode from "react-geocode";
 
 // set the API key for the Geocode library
-Geocode.setApiKey(process.env.MAPS_API);
+Geocode.setApiKey(mapsApi);
 
 function EventMap({ events, google }) {
   // create state variables for locations, center, error, and zoom
@@ -15,7 +16,7 @@ function EventMap({ events, google }) {
 
   // update the zoom level when the events are filtered
   useEffect(() => {
-    if (events.length > 3) {
+    if (events.length > 3 || events.length === 0) {
       setZoom(4); 
     } else {
       setZoom(10); 
@@ -83,5 +84,5 @@ function EventMap({ events, google }) {
 
 // wrap the EventMap component in a GoogleApiWrapper with an API key
 export default GoogleApiWrapper({
-  apiKey: process.env.MAPS_API,
+  apiKey: mapsApi,
 })(EventMap);

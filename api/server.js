@@ -12,7 +12,6 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 app.use(express.json());
 app.use(cors());
 
-
 // create connection to mysql db
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -271,7 +270,7 @@ app.listen(port, () => {
 }); */
 
 // get event by id from blockchain
-app.get('/events/matic/:id', async (req, res) => {
+/* app.get('/events/matic/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const contract = await getContract();
@@ -281,7 +280,7 @@ app.get('/events/matic/:id', async (req, res) => {
         console.error(error);
         res.status(500).send('Error getting event');
     }
-});
+}); */
 
 // book ticket on blockchain
 /* app.post('/transactions/:id/:address', async (req, res) => {

@@ -19,63 +19,65 @@ function Header() {
   const [owner, setOwner] = useState(null);
 
   // fetch the contract owner
-  async function fetchOwner() {
-    const owner = await getContractOwner(contractAddress, abi);
-    setOwner(owner);
-  }
-  fetchOwner();
+  useEffect(() => {
+    async function fetchOwner() {
+      const owner = await getContractOwner(contractAddress, abi);
+      setOwner(owner);
+    }
+    fetchOwner();
+  }, []);
 
-// define a function to display a login notification
-const loginMsg = () => {
-  dispatch({
-    type: "success",
-    message: "Welcome! You have been logged in successfully",
-    title: "Login Successful",
-    position: "topL",
-  });
-};
+  // define a function to display a login notification
+  const loginMsg = () => {
+    dispatch({
+      type: "success",
+      message: "Welcome! You have been logged in successfully",
+      title: "Login Successful",
+      position: "topL",
+    });
+  };
 
-// define a function to display a logout notification
-const logoutMsg = () => {
-  dispatch({
-    type: "info",
-    message: "You have been logged out successfully!",
-    title: "Logout Successful",
-    position: "topL",
-  });
-};
-// return a header element containing a logo and login/logout buttons
-return (
-  <>
-    <header className="banner">
-      <div>
-        <Link to="/">
-          <img className="logo" src={logo} alt="logo"></img>
-        </Link>
-      </div>
-      <div className="menu">
-        <a className="menu-item"><Link to="/"><Tag color="blue" text="Home" /></Link></a>
-        <a className="menu-item"><Link to="/event"><Tag color="blue" text="Events" /></Link></a>
-        <a className="menu-item"><Link to="/aboutus"><Tag color="blue" text="About Us" /></Link></a>
-        <a className="menu-item"><Link to="/faq"><Tag color="blue" text="FAQ" /></Link></a>
-        <a className="menu-item">{account === owner &&
-          <Link to="/create"><Tag color="blue" text="List Event" /></Link>}</a>
-      </div>
-      <div className="connect">
-        {/* If the user is logged in, display the User component */}
-        {account && <User />}
-        {/* If the user is not logged in, display a button to connect wallet */}
-        {!account &&
-          <button className="btn btn-primary login" onClick={() => { loadWeb3(); loginMsg(); fetchOwner(); }}>Connect Wallet</button>
-        }
-        {/* If the user is logged in, display a button to logout */}
-        {account &&
-          <button className="btn btn-danger logout" onClick={() => { handleLogout(); logoutMsg(); }}>Logout</button>
-        }
-      </div>
-    </header>
-  </>
-);
+  // define a function to display a logout notification
+  const logoutMsg = () => {
+    dispatch({
+      type: "info",
+      message: "You have been logged out successfully!",
+      title: "Logout Successful",
+      position: "topL",
+    });
+  };
+  // return a header element containing a logo and login/logout buttons
+  return (
+    <>
+      <header className="banner">
+        <div>
+          <Link to="/">
+            <img className="logo" src={logo} alt="logo"></img>
+          </Link>
+        </div>
+        <div className="menu">
+          <Link to="/" className="menu-item"><Tag color="blue" text="Home" /></Link>
+          <Link to="/event" className="menu-item"><Tag color="blue" text="Events" /></Link>
+          <Link to="/aboutus" className="menu-item"><Tag color="blue" text="About Us" /></Link>
+          <Link to="/faq" className="menu-item"><Tag color="blue" text="FAQ" /></Link>
+          {account === owner &&
+            <Link to="/create" className="menu-item"><Tag color="blue" text="List Event" /></Link>}
+        </div>
+        <div className="connect">
+          {/* If the user is logged in, display the User component */}
+          {account && <User />}
+          {/* If the user is not logged in, display a button to connect wallet */}
+          {!account &&
+            <button className="btn btn-primary login" onClick={() => { loadWeb3(); loginMsg(); }}>Connect Wallet</button>
+          }
+          {/* If the user is logged in, display a button to logout */}
+          {account &&
+            <button className="btn btn-danger logout" onClick={() => { handleLogout(); logoutMsg(); }}>Logout</button>
+          }
+        </div>
+      </header>
+    </>
+  );
 };
 // export the Header component
 export default Header;
