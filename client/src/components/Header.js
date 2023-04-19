@@ -29,22 +29,12 @@ function Header() {
 
   // define a function to display a login notification
   const loginMsg = () => {
-    if (!account) {
-      dispatch({
-        type: "error",
-        message: "Please connect your wallet",
-        title: "Login Failed",
-        position: "topL",
-      });
-      return;
-    } else {
-      dispatch({
+    dispatch({
         type: "success",
         message: "Welcome! You have been logged in successfully",
         title: "Login Successful",
         position: "topL",
-      });
-    } 
+    });
   };
 
   // define a function to display a logout notification

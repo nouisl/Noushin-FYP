@@ -181,7 +181,7 @@ function EventListing(props) {
                                                 )
                                             } else {
                                                 handleNoAccount()
-                                            }
+                                            } 
                                         }}
                                         text="Book Ticket"
                                         className="btn btn-danger"
