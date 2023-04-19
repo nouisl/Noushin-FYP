@@ -49,7 +49,7 @@ function FAQ() {
                       </button>
                     </h2>
                     <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                      <div class="accordion-body">A: In the event of a cancellation or postponement, our platform will automatically issue a refund in the form of the cryptocurrency used for the purchase.</div>
+                      <div class="accordion-body">In the event of a cancellation or postponement, our platform will automatically issue a refund in the form of the cryptocurrency used for the purchase.</div>
                     </div>
                   </div>
                   {/* Accordion item for fourth question */}

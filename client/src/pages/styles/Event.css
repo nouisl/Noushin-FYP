@@ -1,4 +1,5 @@
-p, a {
+p,
+a {
     color: black;
 }
 
@@ -61,7 +62,7 @@ p, a {
 }
 
 .event-search-card {
-  
+
     margin-bottom: 3%;
 }
 
@@ -81,11 +82,12 @@ p, a {
 
 .eventContentL {
     width: 60%;
-    padding:30px;
+    padding: 30px;
     height: calc(100vh - 130px);
     overflow: scroll;
 }
 
 .eventContentR {
-    width:40%;
+    width: 40%;
 }
+  

@@ -9,6 +9,13 @@ export const Web3Provider = ({ children }) => {
   const [web3, setWeb3] = useState(null);
   const { addNotification } = useNotification();
 
+  async function getContractOwner(contractAddress, abi) {
+    if (!web3) return;
+    const contract = new web3.eth.Contract(abi, contractAddress);
+    const owner = await contract.methods.owner().call();
+    return owner;
+  }
+
   async function loadWeb3() {
     if (window.ethereum) {
       const web3Instance = new Web3(window.ethereum);
@@ -46,7 +53,7 @@ export const Web3Provider = ({ children }) => {
   }
 
   return (
-    <Web3Context.Provider value={{ account, web3, loadWeb3, handleLogout }}>
+    <Web3Context.Provider value={{ account, web3, loadWeb3, handleLogout, getContractOwner }}>
       {children}
     </Web3Context.Provider>
   );

@@ -2,6 +2,7 @@
 import './styles/App.css';
 import Home from "./pages/Home";
 import Event from "./pages/Event";
+import CreateEvent from "./pages/CreateEvent";
 import AboutUs from "./components/AboutUs";
 import FAQ from "./components/FAQ";
 import Privacy from "./components/Privacy";
@@ -20,6 +21,7 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<Home />} />
                                 <Route path="/event" element={<Event />} />
+                                <Route path="/create" element={<CreateEvent />} />
                                 <Route path="/aboutus" element={<AboutUs />} />
                                 <Route path="/faq" element={<FAQ />} />
                                 <Route path="/privacy" element={<Privacy />} />

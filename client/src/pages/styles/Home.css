@@ -7,7 +7,6 @@ h1, h2 {
   height: calc(10vw*0.3)
 }
 
-
 .column {
     padding: 80px 10px 80px 10px;
     text-align: center;
@@ -42,14 +41,6 @@ button {
   cursor: pointer;
   width: 200px;
   height: 40px;
-}
-
-a .sc {
-  color: black;
-}
-
-a .sc:hover {
-  color: #2E7DAF;
 }
 
 .home {

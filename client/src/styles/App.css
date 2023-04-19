@@ -11,3 +11,10 @@ body {
   background: linear-gradient(to bottom, #2E7DAF 0%, #23158c 100%);
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

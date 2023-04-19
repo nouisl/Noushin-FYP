@@ -1,0 +1,26 @@
+.labelling label {
+    /* Align the label text to the right */
+    align-items: center;
+    justify-content: flex-start;
+    margin: 10px;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"], 
+select {
+  /* Make the input elements take up the full width of the form */
+  margin-left: 10px;
+  height: 30px;
+}
+
+.create-title {
+    margin-top: 20px;
+}
+
+.submit {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

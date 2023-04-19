@@ -14,6 +14,8 @@ function EventListing(props) {
     const abi = require("../contractABI.json");
     const { web3, account } = useContext(Web3Context);
     const [loading, setLoading] = useState(false);
+    // get today's date
+    const today = new Date();
 
     // update the num_tickets value for a specific event
     const handleNumTicketsChange = (event_id, value) => {
@@ -196,8 +198,8 @@ function EventListing(props) {
                         </div>
                         <hr className="line" />
                     </div>
-                ))
-            ) : (
+                )
+                )) : (
                 <p style={{ color: "white" }}>No event found.</p>
             )}
         </>

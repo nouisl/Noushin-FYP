@@ -10,7 +10,7 @@ const provider = new Web3('https://rpc-mumbai.maticvigil.com/');
 const web3 = new Web3(provider);
 const contractAddress = process.env.CONTRACT_ADDRESS;
 app.use(express.json());
-app.use(cors()); 
+app.use(cors());
 
 
 // create connection to mysql db
@@ -121,10 +121,9 @@ app.get('/events/categories', async (req, res) => {
 });
 
 // create event in sql and on blockchain
-app.post('/events/:address', async (req, res) => {
+app.post('/events/create', async (req, res) => {
+    const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category } = req.body;
     try {
-        const address = req.params.address;
-        const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category } = req.body;
         const sql = 'INSERT INTO events (event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const result = await new Promise((resolve, reject) => {
             connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category], (err, result) => {
@@ -133,18 +132,9 @@ app.post('/events/:address', async (req, res) => {
             });
         });
         const eventId = result.insertId;
-        const name = event_name;
-        const totalTickets = total_tickets;
-        const pricePerTicket = price_per_ticket;
-        const contract = await getContract();
-        const gasPrice = await web3.eth.getGasPrice();
-        const options = { gasPrice: gasPrice, gasLimit: 5000000, from: address };
-        const event = await contract.methods.createEvent(eventId, name, totalTickets, pricePerTicket).send(options);
-        console.log(`Event with ID ${eventId} added`);
-        res.send(event);
+        res.json({ message: 'Event created successfully!', eventId });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        console.error('Error in /events/create endpoint:', error);
     }
 });
 
@@ -154,7 +144,7 @@ app.put('/events/:id', (req, res) => {
         const id = req.params.id;
         const { event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category } = req.body;
         const sql = 'UPDATE events SET event_name = ?, city = ?, venue = ?, img_url = ?, event_description = ?, event_date = ?, start_time = ?, end_time = ?, total_tickets = ?, price_per_ticket = ?, organizer = ?, tickets_sold = ?, category = ? WHERE event_id = ?';
-        connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category ], (err, result) => {
+        connection.query(sql, [event_name, city, venue, img_url, event_description, event_date, start_time, end_time, total_tickets, price_per_ticket, organizer, tickets_sold, category], (err, result) => {
             if (err) throw err;
             console.log(`Event with ID ${id} updated`);
             res.send('Event updated');

@@ -9,10 +9,11 @@ footer {
     padding: 30px 60px;
 }
 
-a .ig, .fb {
+a .ig, .fb .li{
     color: black;
+    text-decoration: underline !important;
 }
-
+ 
 a .ig:hover, .fb:hover {
     color: #2E7DAF;
 }

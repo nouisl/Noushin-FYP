@@ -29,7 +29,7 @@ function Footer() {
               <FaInstagram className="ig mx-2" />
             </a>
             <a href="https://www.linkedin.com/in/noushin-islam-bz/">
-              <FaLinkedinIn className="ig mx-2" />
+              <FaLinkedinIn className="li mx-2" />
             </a>
           </div>
         </div>

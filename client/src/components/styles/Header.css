@@ -1,6 +1,6 @@
 .connect {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end !important;
     align-items: center;
 }
 
@@ -36,4 +36,19 @@
     width: 50px !important;
     margin-right: 5% !important;
 }
+
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.menu-item:hover {
+    color: #2E7DAF;
+}
+
 
