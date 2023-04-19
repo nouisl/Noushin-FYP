@@ -85,7 +85,7 @@ function CreateEvent() {
             const tickets = total_tickets - tickets_sold;
             const result = await contract.methods.createEvent(event_id, event_name, tickets, price_per_ticket)
                 .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
-            handleSuccess(response.data.insertId, event_name);
+            handleSuccess(event_id, event_name);
         } catch (error) {
             // call handleError function to dispatch error notification
             handleError(error.message);
