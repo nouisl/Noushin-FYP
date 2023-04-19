@@ -4,7 +4,7 @@ import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 import Geocode from "react-geocode";
 
 // set the API key for the Geocode library
-Geocode.setApiKey("AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE");
+Geocode.setApiKey(process.env.MAPS_API);
 
 function EventMap({ events, google }) {
   // create state variables for locations, center, error, and zoom
@@ -83,5 +83,5 @@ function EventMap({ events, google }) {
 
 // wrap the EventMap component in a GoogleApiWrapper with an API key
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE",
+  apiKey: process.env.MAPS_API,
 })(EventMap);
