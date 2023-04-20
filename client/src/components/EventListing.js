@@ -179,6 +179,7 @@ function EventListing(props) {
                                                     event.price_per_ticket,
                                                     num_tickets[event.event_id]
                                                 )
+                                                setNumTickets("")
                                             } else {
                                                 handleNoAccount()
                                             } 
