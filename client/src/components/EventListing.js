@@ -47,7 +47,7 @@ function EventListing(props) {
     const handleNoAccount = () => {
         dispatch({
             type: "error",
-            message: `You need to connect your wallet to book a rental`,
+            message: `You need to connect your wallet to book.`,
             title: "Not Connected",
             position: "topL",
         });
