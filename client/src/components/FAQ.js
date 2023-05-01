@@ -15,7 +15,7 @@ function FAQ() {
           <div className="row">
             <div className="col bg-white p-5">
               {/* FAQ title */}
-              <h3 className="my-2" style={{ fontWeight: "bold" }}>FAQ</h3>
+              <h3 className="p-3" style={{ fontWeight: "bold" }}>FAQ</h3> 
               <div className="py-4" style={{ textAlign: "left" }}>
                 {/* Accordion for FAQ */}
                 <div class="accordion accordion-flush" id="accordionFlushExample">

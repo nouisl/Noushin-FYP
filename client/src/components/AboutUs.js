@@ -10,11 +10,11 @@ function AboutUs() {
      {/* Header component */}
       <Header />
       <div className="background text-black py-5">
-      {/* About Us title */}
-      <h1 className="mt-2" style={{ fontWeight: "bold" }}>About Us</h1>
         <div className="container">
           <div className="row">
             <div className="col bg-white p-5">
+              {/* About Us title */}
+              <h3 className="p-2" style={{ fontWeight: "bold" }}>About Us</h3>
               <div className="py-4" style={{ textAlign: "left" }}>
                 {/* Welcome message */}
                 <p>Welcome to our web3 ticketing platform, where we are revolutionizing the way event tickets are bought and sold. 

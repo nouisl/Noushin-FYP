@@ -11,12 +11,11 @@ function Privacy() {
       {/* Header component */}
       <Header />
       <div className="background text-black py-5">
-        {/* Privacy Policy title */}
-        <h1 className="mt-3" style={{ fontWeight: "bold" }}>Privacy Policy</h1>
         <div className="container">
           <div className="row">
             <div className="col bg-white p-5">
-              <div className="py-2" style={{ textAlign: "left" }}>
+            <h3 className="p-2" style={{ fontWeight: "bold" }}>Privacy Policy</h3>
+              <div className="py-4" style={{ textAlign: "left" }}>
                 {/* Introduction to Privacy Policy */}
                 <p>
                   This policy describes how we utilize your personal data at SmartShop.
