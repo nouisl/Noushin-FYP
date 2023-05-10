@@ -32,7 +32,6 @@ function App() {
         </div>
     );
 }
-
 // export the App component
 export default App;
 
