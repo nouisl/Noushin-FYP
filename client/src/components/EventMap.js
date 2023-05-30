@@ -80,8 +80,8 @@ function EventMap({ events, google }) {
 
 // wrap the EventMap component in a GoogleApiWrapper with an API key
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE",
+  apiKey: process.env.CONTRACT_ADDRESS,
 })(EventMap);
 
 // set the API key for the Geocode library
-Geocode.setApiKey("AIzaSyDnQnlcNKS8Ris8LlRRZlt1cBEbZgxRVTE");
+Geocode.setApiKey(process.env.CONTRACT_ADDRESS);
