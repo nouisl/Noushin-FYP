@@ -11,3 +11,22 @@ The Ticket3 platform offers various features for users. Event attendees can disc
 - Backend: Node.js is utilized for the backend development of Ticket3 to write RESTful API. 
 - Database: MySQL is chosen as the database management system for Ticket3. 
 - Blockchain: Solidity is the programming language used for developing smart contracts on the Ethereum blockchain in this project. 
+
+<br /> **Installation Guide**:
+To run and create one’s own version of Ticket3, follow the following instructions:
+1. Install the MetaMask extension in your primary browser and set up an account with funds collected from faucets. This is required for making transactions on the Ethereum blockchain.
+2. Create tables “events” and “tickets” in the MySQL database.This can by logging and running the following queries:
+Figure 25: MySQL queries to create tables.
+3. Replace the MySQL information in server.js with the updated information.
+4. Set the wallet private key environmental variable in server.js with the contract owner’s private key.
+5. Download or clone the project folder.
+6. Fetch the smart contract code from WebTicketing.sol and compile and deploy it.
+7. In the "api" and "client" directories of the project, replace the contractAddressvariable in the web3.js files with the new address.
+8. Open project folder and navigate to the directory named “api” on it and run the following commands to install the necessary dependencies and start the server:
+`“npm install” and “npm start”`
+9. In a new terminal window, navigate to the “client“ directory of the project and repeat the same by running the following commands: “npm install” and “npm
+start“
+10. The web app will open automatically on the localhost at port 3000.
+
+ 
+This way, one can create a new web app to manage events, sell tickets, and view transaction history on the Ethereum blockchain using Ticket3’s source code.
