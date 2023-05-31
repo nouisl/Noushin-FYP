@@ -7,7 +7,7 @@ The Ticket3 platform offers various features for users. Event attendees can disc
 ### This repository contains the source code and implementation of the Ticket3 platform.
 
 <br /> **The tech stack consists of the following components**:
-- Frontend: JavaScript with React is used for developing the frontend of the Ticket3 platform.
+- Frontend: JavaScript with React is used for developing the frontend of the Ticket3 platform. CSS with Bootstrap is used as well.
 - Backend: Node.js is utilized for the backend development of Ticket3 to write RESTful API. 
 - Database: MySQL is chosen as the database management system for Ticket3. 
 - Blockchain: Solidity is the programming language used for developing smart contracts on the Ethereum blockchain in this project. 
