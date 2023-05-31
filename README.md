@@ -11,7 +11,8 @@ The Ticket3 platform offers various features for users. Event attendees can disc
 - Backend: Node.js is utilized for the backend development of Ticket3 to write RESTful API. 
 - Database: MySQL is chosen as the database management system for Ticket3. 
 - Blockchain: Solidity is the programming language used for developing smart contracts on the Ethereum blockchain in this project. 
-<br />
+
+
 ## Installation Guide:
 
 <br /> To run and create one’s own version of Ticket3, follow the following instructions:
