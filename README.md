@@ -13,7 +13,7 @@ The Ticket3 platform offers various features for users. Event attendees can disc
 - Blockchain: Solidity is the programming language used for developing smart contracts on the Ethereum blockchain in this project. 
 
 <br /> **Installation Guide**:
-To run and create one’s own version of Ticket3, follow the following instructions:
+<br /> To run and create one’s own version of Ticket3, follow the following instructions:
 1. Install the MetaMask extension in your primary browser and set up an account with funds collected from faucets. This is required for making transactions on the Ethereum blockchain.
 2. Create tables “events” and “tickets” in the MySQL database.This can by logging and running the following queries:
 Figure 25: MySQL queries to create tables.
