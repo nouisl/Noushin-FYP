@@ -1,4 +1,4 @@
-## Ticket3
+### Ticket3
 
 Ticket3 is a web-based solution that provides a secure and user-friendly ticketing experience. The platform is built using the latest web technologies, focusing on providing a seamless experience for users and ensuring transparency and security. It employs blockchain technology, cryptocurrency, and non-fungible tokens (NFTs) to enhance the security, transparency, and efficiency of traditional web ticketing.
 With the growing concerns around ticket fraud, the issue of limited transparency and accountability seems to be the cause. Thus, Ticket3 aims to create a secure and reliable solution to eliminate the need for third-party providers. To do so, the application utilises a smart contract that executes predetermined conditions when interacted with. The smart contract uses the ERC721 token standard to create NFTs for event tickets. Using NFTs ensures proof of authenticity and ownership, as every transaction on the blockchain is publicly visible and verifiable. This way, maximum transparency is achieved by removing any intermediary and using NFTs.
@@ -12,7 +12,7 @@ The Ticket3 platform offers various features for users. Event attendees can disc
 - Database: MySQL is chosen as the database management system for Ticket3. 
 - Blockchain: Solidity is the programming language used for developing smart contracts on the Ethereum blockchain in this project. 
 
-<br /> **Installation Guide**:
+## Installation Guide:
 
 <br /> To run and create one’s own version of Ticket3, follow the following instructions:
 1. Install the MetaMask extension in your primary browser and set up an account with funds collected from faucets. This is required for making transactions on the Ethereum blockchain.
